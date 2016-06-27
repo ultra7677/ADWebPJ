@@ -1,0 +1,33 @@
+body {
+  	background-image: url(../imgs/bg.png);
+	  background-size: cover;
+	  background-size: auto 1400px;
+    background-repeat: no-repeat;
+}
+
+.input-field{
+	background-color: rgb(228, 228, 228);
+}
+
+.input-label {
+  height: 30px;
+  line-height: 30px;
+  width: 100%;
+  color: #CCCCCC;
+  font-size: 14px;
+}
+
+.panel.panel-default.action-panel{
+	left : 35%;
+	top : 20%;
+	right : 0px;
+}
+
+.input-field-group.password {
+  margin-top: 10px;
+}
+
+.btn.oauth-login, .btn.login, .useful-links {
+  margin-top: 20px;
+}
+

@@ -1,0 +1,82 @@
+ul, menu, dir {
+  -webkit-padding-start: 0px;
+  -webkit-margin-before: 0;
+  -webkit-margin-after: 0;
+  list-style-type: none;
+}
+
+.panel.panel-default{
+	margin-left : 15px;
+	margin-top : 15px;
+	max-width : 970px;
+}
+
+.page-body {
+  padding: 30px 50px;
+}
+
+.input-field {
+  height: 38px;
+  line-height: 38px;
+  width: 100%;
+  border-radius: 5px;
+  border-radius: 5px;
+  border: 1px solid #999;
+  padding: 0 10px;
+}
+
+.input-label {
+  height: 30px;
+  line-height: 30px;
+  width: 100%;
+  color: #000000;
+  font-size: 14px;
+}
+
+.input-label.error{
+  color:red;
+}
+
+.input-field-group {
+  margin: 10px 0px;
+  clear: both;
+}
+
+.btn-xlarge {
+  height: 45px;
+  width: 100%;
+  background-color: #6283AB;
+  border-radius: 5px;
+  color: #fff;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  width: 100%;
+}
+
+.btn-xlarge:hover {
+  color: #fff;
+}
+
+.panel.action-panel {
+  width: 450px;
+  position: absolute;
+  right: 200px;
+  top: 250px;
+  background: rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(204, 204, 204, 0.5);
+}
+
+.hidden {
+  display: none;
+}
+
+.panel .panel-heading {
+  position: relative;
+  color: #000000;
+}
+
+.btn-primary {
+  background-color: #B4BCC5;
+  border-color: #B4BCC5;
+}

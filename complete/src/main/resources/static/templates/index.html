@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Log In</title>
+<script type="text/javascript" src="../libs/jquery-2.1.4/jquery-2.1.4.min.js"></script>
+<script type="text/javascript" src="../libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="../libs/bootstrap-3.3.5/css/bootstrap.min.css"></link>
+<link rel="stylesheet" href="../css/common.css"></link>
+<link rel="stylesheet" href="../css/login.css"></link>
+<script type="text/javascript">
+
+$(document).on("click", "#submit_button", function() {
+	
+    // get all the inputs into an array.
+    var username = $('#username').val();
+ 	var password = $('#password').val();
+ 	alert(username);
+ 	alert(password);
+ 	$.ajax({
+ 		url:"login",
+ 		type:"GET",
+ 		data:{
+ 			username:username,
+ 			password:password
+ 		},
+ 		dataType:"json",
+ 	})
+ 	// Code to run if the request succeeds (is done);
+    // The response is passed to the function
+	.done(function( json ) {
+       alert(json);
+  	})
+  	// Code to run if the request fails; the raw request and
+  	// status codes are passed to the function
+  	.fail(function( xhr, status, errorThrown ) {
+   	    alert( "Sorry, there was a problem!" );
+        console.dir( xhr );
+        console.log( "Error: " + errorThrown );
+        console.log( "Status: " + status );
+    })
+    // Code to run regardless of success or failure;
+    .always(function( xhr, status ) {
+        alert( "The request is complete!" );
+	});
+});
+
+</script>
+</head>
+
+
+<body>
+	<div class="panel panel-default action-panel">
+		<div class="panel-heading">Login</div>
+		<div class="panel-body">
+			<form class="login-form" id="loginForm" action="#" method="POST">
+				<div class="input-field-group">
+					<div class="input-label ">Username</div>
+					<input class="input-field" id="username"  type="text" />
+				</div>
+				<div class="input-field-group password">
+					<div class="input-label  password-label">Password</div>
+					<input class="input-field" id="password" type="password"/>
+				</div>
+				<div class="input-label error hidden"></div>
+				<input class="btn btn-xlarge  login" id="submit_button" type="submit"/>
+			</form>
+		</div>
+	</div>
+</body>
+</html>
