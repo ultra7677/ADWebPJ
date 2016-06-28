@@ -11,37 +11,33 @@
 
 $(document).on("click", "#submit_button", function() {
 	
-    // get all the inputs into an array.
-    var username = $('#username').val();
- 	var password = $('#password').val();
- 	alert(username);
- 	alert(password);
+
+ 	var username =  $('#username').val();
+ 	var password =  $('#password').val();
+ 	//alert(username);
+ 	//alert(password);
+	var data = {};
+	data["username"] = username;
+	data["password"] = password;
+ 	
  	$.ajax({
- 		url:"login",
- 		type:"GET",
- 		data:{
- 			username:username,
- 			password:password
- 		},
- 		dataType:"json",
+ 		type:"POST",
+ 		contentType: "application/json",
+ 		url:"/login",
+ 	    data: JSON.stringify(data),
+ 	    dataType: 'json',
+		success : function(data) {
+			console.log("SUCCESS: ", data);
+			//display(data);
+		},
+		error : function(e) {
+			console.log("ERROR: ", e);
+			//display(e);
+		},
+		done : function(e) {
+			console.log("DONE");
+		}
  	})
- 	// Code to run if the request succeeds (is done);
-    // The response is passed to the function
-	.done(function( json ) {
-       alert(json);
-  	})
-  	// Code to run if the request fails; the raw request and
-  	// status codes are passed to the function
-  	.fail(function( xhr, status, errorThrown ) {
-   	    alert( "Sorry, there was a problem!" );
-        console.dir( xhr );
-        console.log( "Error: " + errorThrown );
-        console.log( "Status: " + status );
-    })
-    // Code to run regardless of success or failure;
-    .always(function( xhr, status ) {
-        alert( "The request is complete!" );
-	});
 });
 
 </script>
@@ -52,7 +48,7 @@ $(document).on("click", "#submit_button", function() {
 	<div class="panel panel-default action-panel">
 		<div class="panel-heading">Login</div>
 		<div class="panel-body">
-			<form class="login-form" id="loginForm" action="#" method="POST">
+			
 				<div class="input-field-group">
 					<div class="input-label ">Username</div>
 					<input class="input-field" id="username"  type="text" />
@@ -63,7 +59,7 @@ $(document).on("click", "#submit_button", function() {
 				</div>
 				<div class="input-label error hidden"></div>
 				<input class="btn btn-xlarge  login" id="submit_button" type="submit"/>
-			</form>
+	
 		</div>
 	</div>
 </body>
