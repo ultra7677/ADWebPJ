@@ -26,6 +26,7 @@ public class SampleController
 		System.out.println(loginForm.getPassword());
 		
 		System.out.println("hello world");
+		System.out.println("hello world");
 		// handle method
 		return true;
 	 }
