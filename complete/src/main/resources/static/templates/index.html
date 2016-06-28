@@ -19,7 +19,7 @@ $(document).on("click", "#submit_button", function() {
 	var data = {};
 	data["username"] = username;
 	data["password"] = password;
- 	
+ 	/*
  	$.ajax({
  		type:"POST",
  		contentType: "application/json",
@@ -37,7 +37,28 @@ $(document).on("click", "#submit_button", function() {
 		done : function(e) {
 			console.log("DONE");
 		}
- 	})
+ 	}) */	
+ 	
+ 	var JsonArray = JSON.stringify([    
+ 	                               {username: "user1", password: "123"},    
+ 	                               {username: "user2", password: "12345"}    
+ 	                          ]);  
+ 	alert("send:"+JsonArray);
+ 	
+ 	$.ajax({
+ 		type:"POST",
+ 		contentType : 'application/json',
+ 		url:"/passObjectArray",
+ 		dataType:"json",
+ 		data:JsonArray,
+ 	    success : function(data) {  
+ 	  		console.log(data);
+ 	     },  
+ 	    error : function() {  
+      		alert('Err...');  
+ 	    }
+ 	});
+ 	                
 });
 
 </script>
