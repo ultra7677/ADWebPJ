@@ -21,7 +21,7 @@ public class SampleController
 		   	return "templates/index.html";
 	 }
 	 
-	 
+	/* 
 	 @RequestMapping(value = "/login")
 	 public @ResponseBody Boolean loginRequest(@RequestBody LoginForm loginForm)
 	 {
@@ -30,7 +30,7 @@ public class SampleController
 		
 		// handle method
 		return true;
-	 }
+	 }*/
 	 
 	 @RequestMapping(value = "/passObjectArray")
 	 public @ResponseBody List<LoginForm> recieveObjectArray(@RequestBody List<LoginForm> jsonArray) throws Exception

@@ -9,22 +9,19 @@ import javax.persistence.Table;
 
 @Entity
 @Table
-public class User {
+/*
+ * Location 类表示一个地标
+ */
+public class Location {
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 	
-	@Column(unique = true,nullable=false)
-	private String username;
-
-	public String getUsername() {
-		return username;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
+	@Column
+	private String name;
+	
+	
 	public long getId() {
 		return id;
 	}
@@ -32,6 +29,13 @@ public class User {
 	public void setId(long id) {
 		this.id = id;
 	}
-	
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 
 }
