@@ -1,6 +1,5 @@
 package com.adweb.app.entity;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -13,16 +12,13 @@ import javax.persistence.Table;
 @Entity
 @Table
 /*
- * Rating 表示一个user对一个item的满意度评分
+ * Collect 表示一个user对一个item收藏
  */
-public class Rating {
+public class Collect {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 	
-	@Column
-	private int ratingvalue;
-
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
 	private User user;
@@ -37,14 +33,6 @@ public class Rating {
 
 	public void setId(long id) {
 		this.id = id;
-	}
-	
-	public int getRatingvalue() {
-		return ratingvalue;
-	}
-
-	public void setRatingvalue(int ratingvalue) {
-		this.ratingvalue = ratingvalue;
 	}
 
 	public User getUser() {
@@ -62,5 +50,4 @@ public class Rating {
 	public void setItem(Item item) {
 		this.item = item;
 	}
-	
 }

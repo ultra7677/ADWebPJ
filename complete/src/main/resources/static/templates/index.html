@@ -18,12 +18,12 @@ $(document).on("click", "#submit_button", function() {
  	//alert(password);
 	var data = {};
 	data["username"] = "Banzhao";
-	data["locationName"] = "博物馆";
+	data["password"] = "Initia0";
  	
  	$.ajax({
  		type:"POST",
  		contentType: "application/json",
- 		url:"/getItemList/normal",
+ 		url:"/login",
  	    data: JSON.stringify(data),
  	    dataType: 'json',
 		success : function(data) {

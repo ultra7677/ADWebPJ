@@ -21,7 +21,7 @@ public class SampleController
 		   	return "templates/index.html";
 	 }
 	 
-	
+	/*
 	 @RequestMapping(value = "/login")
 	 public @ResponseBody Boolean loginRequest(@RequestBody LoginForm loginForm)
 	 {
@@ -38,7 +38,7 @@ public class SampleController
 		 for (LoginForm i:jsonArray)
 	         System.out.println(i.getUsername());
           return jsonArray;
-	 }
+	 }*/
 	
 }
 	

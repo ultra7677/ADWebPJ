@@ -37,9 +37,17 @@ public class Item {
 	@JoinColumn(name = "location_id")
 	private Location location;
 	
-	//表示景点半径
+	//被收藏数
 	@Column
-	private int radius;
+	private int collect;
+
+	public int getCollect() {
+		return collect;
+	}
+
+	public void setCollect(int collect) {
+		this.collect = collect;
+	}
 
 	public long getId() {
 		return id;
