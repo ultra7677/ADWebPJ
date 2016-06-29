@@ -32,16 +32,9 @@ public class TestController {
 		   	
 		   	for (User user : this.userService.findAll()){
 				System.out.println(user.getUsername());
-			}
+			}		    
 		   	
-		    User user = this.userService.findByUsername("Razor");
-		    System.out.println(user.getId());
-		    
-		    Item item = this.itemService.findByName("1933老杨坊");
-		   	System.out.println(item.getId());
-		   	System.out.println(this.itemService.getAverageRating(item));
-		   	
-		   	Location location = this.locationService.findByName("上海工业遗址");
+		   	Location location = this.locationService.findByName("博物馆");
 		   	List<Item> itemList = this.itemService.findByLocation(location);
 		   	for(Item itemObject : itemList){
 		   		System.out.println(itemObject.getName());

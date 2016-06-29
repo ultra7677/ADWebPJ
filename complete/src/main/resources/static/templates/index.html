@@ -17,31 +17,28 @@ $(document).on("click", "#submit_button", function() {
  	//alert(username);
  	//alert(password);
 	var data = {};
-	data["username"] = username;
-	data["password"] = password;
- 	/*
+	data["username"] = "Banzhao";
+	data["locationName"] = "博物馆";
+ 	
  	$.ajax({
  		type:"POST",
  		contentType: "application/json",
- 		url:"/login",
+ 		url:"/getItemList/averageRating",
  	    data: JSON.stringify(data),
  	    dataType: 'json',
 		success : function(data) {
 			console.log("SUCCESS: ", data);
-			//display(data);
 		},
 		error : function(e) {
 			console.log("ERROR: ", e);
-			//display(e);
 		},
 		done : function(e) {
 			console.log("DONE");
 		}
- 	}) */	
- 	
+ 	}) 	
+ 	/*
  	var JsonArray = JSON.stringify([    
- 	                               {username: "user1", password: "123"},    
- 	                               {username: "user2", password: "12345"}    
+ 	                               {username: "Banzhao", locationName: "公园"}, 
  	                          ]);  
  	alert("send:"+JsonArray);
  	
@@ -57,7 +54,7 @@ $(document).on("click", "#submit_button", function() {
  	    error : function() {  
       		alert('Err...');  
  	    }
- 	});
+ 	}); */
  	                
 });
 

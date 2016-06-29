@@ -32,10 +32,14 @@ public class Item {
 	@Column
 	private float latitude;
 	
-	// 表示item所属于的location
+	//表示item所属于的location
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "location_id")
 	private Location location;
+	
+	//表示景点半径
+	@Column
+	private int radius;
 
 	public long getId() {
 		return id;

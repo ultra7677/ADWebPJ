@@ -15,10 +15,5 @@ import com.adweb.app.service.UserService;
 public class UserController {
 	@Autowired
 	private UserService userService;
-	
-	@RequestMapping(value = "/login",method = RequestMethod.GET)
-	public @ResponseBody void loginRequest(@RequestBody LoginForm loginForm)
-	{
-		
-	}
+
 }
