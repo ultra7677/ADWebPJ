@@ -36,4 +36,24 @@ public class UserController {
 		return sendLoginForm;
 	}
 	
+	@RequestMapping(value="/register")
+	public @ResponseBody SendLoginForm registerRequest(@RequestBody LoginForm registerForm){
+		String username = registerForm.getUsername();
+		String password = registerForm.getPassword();
+		SendLoginForm sendRegisterForm = new SendLoginForm();
+		
+		if(this.userService.exist(username)){
+			sendRegisterForm.setStatus(-1);
+			return sendRegisterForm;
+		}
+		
+		User user = new User();
+		user.setUsername(username);
+		user.setPassword(password);
+		
+		this.userService.create(user);
+		
+		sendRegisterForm.setStatus(1);
+	    return sendRegisterForm;
+	}
 }
