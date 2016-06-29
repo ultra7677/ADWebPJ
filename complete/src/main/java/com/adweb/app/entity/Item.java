@@ -40,6 +40,30 @@ public class Item {
 	//被收藏数
 	@Column
 	private int collect;
+	
+	//足迹(被去过的次数)
+	@Column
+	private int footstep;
+	
+	//心愿(被加入心愿单的次数)
+	@Column
+	private int wanted;
+	
+	public int getWanted() {
+		return wanted;
+	}
+
+	public void setWanted(int wanted) {
+		this.wanted = wanted;
+	}
+
+	public int getFootstep() {
+		return footstep;
+	}
+
+	public void setFootstep(int footstep) {
+		this.footstep = footstep;
+	}
 
 	public int getCollect() {
 		return collect;
