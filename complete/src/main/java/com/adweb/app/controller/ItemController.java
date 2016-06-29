@@ -23,6 +23,13 @@ public class ItemController {
 	@Autowired ItemService itemService;
 	@Autowired LocationService locationService;
 	
+	@RequestMapping(value = "getItemList/normal")
+	public @ResponseBody List<Item> getItemListNormal(@RequestBody GetItemListForm getItemListForm){
+		Location location = this.locationService.findByName(getItemListForm.getLocationName());
+		List<Item> itemList = this.itemService.findByLocation(location);
+		return itemList;
+	}
+	
 	@RequestMapping(value = "getItemList/averageRating")
 	public @ResponseBody List<SendItemListForm> getItemListWithRating(@RequestBody GetItemListForm getItemListForm){
 		Location location = this.locationService.findByName(getItemListForm.getLocationName());
