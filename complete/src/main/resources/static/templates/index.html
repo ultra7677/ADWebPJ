@@ -17,13 +17,15 @@ $(document).on("click", "#submit_button", function() {
  	//alert(username);
  	//alert(password);
 	var data = {};
-	data["username"] = "BanzhaoHeihei";
-	data["password"] = "123123123";
- 	
+	//data["tag"] = "ASDSSDDDDADAD";
+	data["kind"] = "KIND2";
+ //	data["left"] = "100px";
+ //	data["top"] = "50px";
+ 	data["itemName"] = "和平公园";
  	$.ajax({
  		type:"POST",
  		contentType: "application/json",
- 		url:"/login",
+ 		url:"/getTagListByKind",
  	    data: JSON.stringify(data),
  	    dataType: 'json',
 		success : function(data) {
