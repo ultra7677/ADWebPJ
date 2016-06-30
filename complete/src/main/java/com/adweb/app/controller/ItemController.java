@@ -62,7 +62,7 @@ public class ItemController {
 	public @ResponseBody List<SendItemListForm> getItemListWithRecommend(@RequestBody GetItemListForm getItemListForm){
 		Location location = this.locationService.findByName(getItemListForm.getLocationName());
 		List<Item> itemList = this.itemService.findByLocation(location);
-		
+		// need to do 
 		return null;
 	}
 	
