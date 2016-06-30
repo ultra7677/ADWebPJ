@@ -5,23 +5,128 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.adweb.app.entity.Collect;
+import com.adweb.app.entity.Footstep;
 import com.adweb.app.entity.Item;
 import com.adweb.app.entity.Location;
+import com.adweb.app.entity.Share;
+import com.adweb.app.entity.User;
+import com.adweb.app.entity.Wanted;
 import com.adweb.app.model.GetItemListForm;
+import com.adweb.app.model.SendItemForm;
 import com.adweb.app.model.SendItemListForm;
+import com.adweb.app.model.ToForm;
+import com.adweb.app.service.CollectService;
+import com.adweb.app.service.FootstepService;
 import com.adweb.app.service.ItemService;
 import com.adweb.app.service.LocationService;
+import com.adweb.app.service.RatingService;
+import com.adweb.app.service.ShareService;
+import com.adweb.app.service.UserService;
+import com.adweb.app.service.WantedService;
 
 @Controller
 public class ItemController {
 
 	@Autowired ItemService itemService;
+	
 	@Autowired LocationService locationService;
+	
+	@Autowired UserService userService;
+	
+	@Autowired CollectService collectService;
+	
+	@Autowired ShareService shareService;
+	
+	@Autowired FootstepService footstepService;
+	
+	@Autowired WantedService wantedService;
+	
+	@Autowired RatingService ratingService;
+	
+	//用户将一个item收藏
+	@RequestMapping(value = "/toCollect")
+	public @ResponseBody void toCollect(@RequestBody ToForm toForm){
+		Item item = this.itemService.findById(toForm.getItemId());
+		User user = this.userService.findByUsername(toForm.getUsername());
+		
+		item.setCollect(item.getCollect() + 1);
+		this.itemService.create(item);
+		
+		Collect collect = new Collect();
+		collect.setItem(item);
+		collect.setUser(user);
+		
+		this.collectService.create(collect);
+	}
+
+	//用户将一个item分享
+	@RequestMapping(value = "/toShare")
+	public @ResponseBody void toShare(@RequestBody ToForm toForm){
+		Item item = this.itemService.findById(toForm.getItemId());
+		User user = this.userService.findByUsername(toForm.getUsername());
+		
+		item.setShare(item.getShare() + 1);
+		this.itemService.create(item);
+		
+		Share share = new Share();
+		share.setItem(item);
+		share.setUser(user);
+		
+		this.shareService.create(share);
+	}
+	
+	//用户将一个item标记为足迹
+	@RequestMapping(value = "/toStep")
+	public @ResponseBody void toStep(@RequestBody ToForm toForm){
+		Item item = this.itemService.findById(toForm.getItemId());
+		User user = this.userService.findByUsername(toForm.getUsername());
+		
+		item.setFootstep(item.getFootstep() + 1);
+		this.itemService.create(item);
+		
+		Footstep footstep = new Footstep();
+		footstep.setItem(item);
+		footstep.setUser(user);
+		this.footstepService.create(footstep);
+	}
+	
+	//用户将一个item加入心愿
+	@RequestMapping(value = "/toWanted")
+	public @ResponseBody void toWanted(@RequestBody ToForm toForm){
+		Item item = this.itemService.findById(toForm.getItemId());
+		User user = this.userService.findByUsername(toForm.getUsername());
+		
+		item.setWanted(item.getWanted() + 1);
+		this.itemService.create(item);
+		
+		Wanted wanted = new Wanted();
+		wanted.setItem(item);
+		wanted.setUser(user);
+		this.wantedService.create(wanted);
+	}
+	
+	//前端传来itemId,返回所属的Item
+	
+	@RequestMapping(value = "/getItemById/{itemId}")
+	public @ResponseBody SendItemForm getItemById(@PathVariable int itemId){
+		Item item = this.itemService.findById(itemId);
+		SendItemForm form = new SendItemForm();
+		form.setBaseContent(item.getBasecontent());
+		form.setName(item.getName());
+		form.setFiveStar(this.ratingService.calculateFiveStarCountForItem(item));
+		form.setFourStar(this.ratingService.calculateFourStarCountForItem(item));
+		form.setThreeStar(this.ratingService.calculateThreeStarCountForItem(item));
+		form.setTwoStar(this.ratingService.calculateTwoStarCountForItem(item));
+		form.setOneStar(this.ratingService.calculateOneStarCountForItem(item));
+		return form;
+	}
 	
 	//前端传来locationName,返回所有属于该location的item
 	@RequestMapping(value = "/getItemList/normal")

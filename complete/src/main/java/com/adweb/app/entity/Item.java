@@ -49,6 +49,29 @@ public class Item {
 	@Column
 	private int wanted;
 	
+	@Column
+	private String basecontent;
+	
+	public String getBasecontent() {
+		return basecontent;
+	}
+
+	public void setBasecontent(String basecontent) {
+		this.basecontent = basecontent;
+	}
+
+	//被分享的次数
+	@Column
+	private int share;
+	
+	public int getShare() {
+		return share;
+	}
+
+	public void setShare(int share) {
+		this.share = share;
+	}
+
 	public int getWanted() {
 		return wanted;
 	}

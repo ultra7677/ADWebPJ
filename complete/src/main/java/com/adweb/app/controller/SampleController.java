@@ -15,7 +15,7 @@ public class SampleController
 {
 	
 	 
-	 @RequestMapping(value = "/login.html")
+	 @RequestMapping(value = "/testUrl")
 	 public String loadLoginPage() 
 	 {
 		   	return "templates/index.html";

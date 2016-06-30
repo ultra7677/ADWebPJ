@@ -9,6 +9,8 @@ import com.adweb.app.entity.Location;
 public interface ItemRepository  extends CrudRepository<Item,Long> {
 	Item findByName(String name);
 
+	Item findById(Long id);
+	
 	List<Item> findByLocation(Location location);
 	
 	List<Item> findAll();

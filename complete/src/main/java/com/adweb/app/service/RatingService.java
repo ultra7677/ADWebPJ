@@ -37,4 +37,39 @@ public class RatingService {
 		}
 		return (float)sum/totalNum;
 	}
+	
+	public int calculateFiveStarCountForItem(Item item){
+		int totalNum = 0;
+		for (Rating rating : this.ratingRepository.findByItem(item))
+			if (rating.getRatingvalue() == 5)	totalNum ++;	
+		return totalNum;
+	}
+	
+	public int calculateFourStarCountForItem(Item item){
+		int totalNum = 0;
+		for (Rating rating : this.ratingRepository.findByItem(item))
+			if (rating.getRatingvalue() == 4)	totalNum ++;	
+		return totalNum;
+	}
+	
+	public int calculateThreeStarCountForItem(Item item){
+		int totalNum = 0;
+		for (Rating rating : this.ratingRepository.findByItem(item))
+			if (rating.getRatingvalue() == 3)	totalNum ++;	
+		return totalNum;
+	}
+	
+	public int calculateTwoStarCountForItem(Item item){
+		int totalNum = 0;
+		for (Rating rating : this.ratingRepository.findByItem(item))
+			if (rating.getRatingvalue() == 2)	totalNum ++;	
+		return totalNum;
+	}
+	
+	public int calculateOneStarCountForItem(Item item){
+		int totalNum = 0;
+		for (Rating rating : this.ratingRepository.findByItem(item))
+			if (rating.getRatingvalue() == 1)	totalNum ++;	
+		return totalNum;
+	}
 }

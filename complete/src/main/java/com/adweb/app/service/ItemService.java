@@ -20,6 +20,10 @@ public class ItemService {
 		return item;
 	}
 	
+	public Item findById(long id){
+		return this.itemRepository.findById(id);
+	}
+	
 	public Item findByName(String name){
 		return this.itemRepository.findByName(name);
 	}
