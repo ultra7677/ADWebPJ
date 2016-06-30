@@ -15,6 +15,7 @@ import com.adweb.app.entity.Collect;
 import com.adweb.app.entity.Footstep;
 import com.adweb.app.entity.Item;
 import com.adweb.app.entity.Location;
+import com.adweb.app.entity.SearchHistory;
 import com.adweb.app.entity.Share;
 import com.adweb.app.entity.User;
 import com.adweb.app.entity.Wanted;
@@ -27,6 +28,7 @@ import com.adweb.app.service.FootstepService;
 import com.adweb.app.service.ItemService;
 import com.adweb.app.service.LocationService;
 import com.adweb.app.service.RatingService;
+import com.adweb.app.service.SearchHistoryService;
 import com.adweb.app.service.ShareService;
 import com.adweb.app.service.UserService;
 import com.adweb.app.service.WantedService;
@@ -49,6 +51,8 @@ public class ItemController {
 	@Autowired WantedService wantedService;
 	
 	@Autowired RatingService ratingService;
+	
+	@Autowired SearchHistoryService searchHistoryService;
 	
 	//用户将一个item收藏
 	@RequestMapping(value = "/toCollect")
@@ -204,6 +208,58 @@ public class ItemController {
 	@RequestMapping(value = "/getAllItemList/wanted")
 	public @ResponseBody List<SendItemListForm> getAllItemListByWanted(){
 		List<Item> itemList = this.itemService.findAll();
+		return sort(itemList,3);
+	}
+	
+	//按照平均打分返回用户搜索过的所有item
+	@RequestMapping(value = "/getSearchHistory/averageRating/{username}")
+	public @ResponseBody List<SendItemListForm> getSearchHistoryByRating(@PathVariable String username){
+		User user = this.userService.findByUsername(username);
+		List<SearchHistory> searchHistoryList = this.searchHistoryService.findByUser(user);
+		List<Item> itemList = new ArrayList<Item>();
+		for(SearchHistory searchHistory : searchHistoryList){
+			Item item = searchHistory.getItem();
+			itemList.add(item);
+		}
+		return sort(itemList,0);
+	}
+	
+	//按照收藏数返回用户搜索过的所有item
+	@RequestMapping(value = "/getSearchHistory/collect/{username}")
+	public @ResponseBody List<SendItemListForm> getSearchHistoryByCollect(@PathVariable String username){
+		User user = this.userService.findByUsername(username);
+		List<SearchHistory> searchHistoryList = this.searchHistoryService.findByUser(user);
+		List<Item> itemList = new ArrayList<Item>();
+		for(SearchHistory searchHistory : searchHistoryList){
+			Item item = searchHistory.getItem();
+			itemList.add(item);
+		}
+		return sort(itemList,1);
+	}
+	
+	//按照足迹数返回用户搜索过的所有item
+	@RequestMapping(value = "/getSearchHistory/footstep/{username}")
+	public @ResponseBody List<SendItemListForm> getSearchHistoryByFootstep(@PathVariable String username){
+		User user = this.userService.findByUsername(username);
+		List<SearchHistory> searchHistoryList = this.searchHistoryService.findByUser(user);
+		List<Item> itemList = new ArrayList<Item>();
+		for(SearchHistory searchHistory : searchHistoryList){
+			Item item = searchHistory.getItem();
+			itemList.add(item);
+		}
+		return sort(itemList,2);
+	}
+	
+	//按照心愿数返回用户搜索过的所有item
+	@RequestMapping(value = "/getSearchHistory/wanted/{username}")
+	public @ResponseBody List<SendItemListForm> getSearchHistoryByWanted(@PathVariable String username){
+		User user = this.userService.findByUsername(username);
+		List<SearchHistory> searchHistoryList = this.searchHistoryService.findByUser(user);
+		List<Item> itemList = new ArrayList<Item>();
+		for(SearchHistory searchHistory : searchHistoryList){
+			Item item = searchHistory.getItem();
+			itemList.add(item);
+		}
 		return sort(itemList,3);
 	}
 	
