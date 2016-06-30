@@ -20,7 +20,7 @@ public class SearchHistoryService {
 	}
 	
 	public List<SearchHistory> findByUser(User user){
-		return this.searchHistoryRepository.findByUSer(user);
+		return this.searchHistoryRepository.findByUser(user);
 	}
 	
 	public List<SearchHistory> findByItem(Item item){

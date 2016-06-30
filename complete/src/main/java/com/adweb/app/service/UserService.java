@@ -14,7 +14,7 @@ public class UserService {
 		this.userRepository.save(user);
 		return user;
 	}
-	
+		
 	public boolean exist(String username){
 		return this.userRepository.findByUsername(username) != null;
 	}

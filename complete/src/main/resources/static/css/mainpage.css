@@ -1,0 +1,19 @@
+
+#map{
+	position: fixed;
+	z-index: -1;
+	height:1000px;
+	overflow: hidden;
+}
+
+#contentpanal{
+	margin-top:80px;
+	height: 550px;
+}
+
+#layerpanel{
+	position:absolute;
+	top:500px;
+	background-color:white;
+	z-index: 1;
+}

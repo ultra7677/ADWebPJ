@@ -17,7 +17,7 @@ public class FilesService {
 	
 	public String findById(Long id){
 		Files file = this.filesRepository.findOne(id);
-		return file.getFileLocation();
+		return file.getFilelocation();
 	}
 	
 }

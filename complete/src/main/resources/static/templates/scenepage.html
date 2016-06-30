@@ -1,0 +1,210 @@
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<script type="text/javascript" src="../libs/jquery-2.1.4/jquery-2.1.4.min.js"></script>
+<script src="http://apps.bdimg.com/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+
+<script type="text/javascript" src="../libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="http://apps.bdimg.com/libs/angular.js/1.4.6/angular.min.js"></script>
+<script src="http://apps.bdimg.com/libs/angular.js/1.4.6/angular-animate.min.js"></script>
+<script src="http://apps.bdimg.com/libs/angular-route/1.3.13/angular-route.js"></script>
+<link href="http://libs.baidu.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="../css/mainpage.css"></link>
+<link rel="stylesheet" href="http://apps.bdimg.com/libs/jqueryui/1.10.4/css/jquery-ui.min.css"></link>
+<link rel="stylesheet" href="../css/item.css"></link>
+<link rel="stylesheet" href="../libs/bootstrap-3.3.5/css/bootstrap.min.css"></link>
+<link rel="stylesheet" href="../css/common.css"></link>
+
+
+
+  
+</head>
+
+<body ng-app="ngRouteExample" >
+  
+  <div class="container-fluid">
+    <div class="row-fluid">
+        <div class="span12">
+        <div class="row-fluid">
+			<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+				<div class="navbar-header">
+					 <a class="navbar-brand" href="#">随评</a>
+				</div>
+				<div>
+					<form class="navbar-form navbar-left" role="search">
+						<div class="form-group">
+						  	<input type="text" class="form-control search-query" placeholder="Search">
+						</div>
+						<button type="submit" class="btn btn-default">搜索</button>
+					</form>    
+					<div>
+					  	<ul class="nav navbar-nav pull-right">
+					      	<li class="dropdown">
+					            <a class="dropdown-toggle" data-toggle="dropdown">
+					               菜单 
+					               <b class="caret"></b>
+					            </a>
+					            <ul class="dropdown-menu">
+					               <li><a href="#">分离的链接</a></li>
+					               <li class="divider"></li>
+					               <li><a href="#">另一个分离的链接</a></li>
+					            </ul>
+					        </li>
+					    </ul>
+	                </div>
+				</div>
+			</nav>
+		</div>
+		<div class="panel panel-primary nav nav-pills" id="layerpanel">
+			<div class="panel-heading" >
+      			<h3 class="panel-title">
+         			图层
+      			</h3>
+   			</div>
+   			<div class="panel-body" id="panel-body">
+	   		</div>
+   		</div>
+            <div class = "" id="map" style="positon:fixed">
+               <!--  <img src="../imgs/bg.png" class="img-rounded"> -->
+            </div>
+            <div class="panel panel-default navbar-fixed-bottom col-xs-10 col-md-offset-1">
+            	<ul class="nav nav-pills">
+            	    <li>
+            	        <a href="#/item" class="switch">项目列表</a>
+            	    </li>
+            	    <li>
+            	        <a href="#/nearby" class="switch">附近</a>
+            	    </li>
+            	    <li>
+            	        <a href="#/searchhistory" class="switch">搜索历史</a>
+            	    </li>
+            	    <li>
+            	        <a href="#/routing" class="switch">路线规划</a>
+            	    </li>
+            	    <li>
+            	        <a href="#/mine" class="switch">我的</a>
+            	    </li>
+            	    <li class="pull-right">
+            	        <a href="#/home" id="backtomap">回到地图</a>
+            	    </li>
+            	</ul>
+            </div>
+
+            <div ng-view="" class = " row-fluid col-xs-10 col-md-offset-1 tab-content" id="contentpanal" style="top:-1000px">
+    		</div>
+
+    	</div>
+
+  </div>
+  <div> <input type="button" id="result" value="查询"/> </div>
+</div>
+<script type="text/javascript" src="../js/baidumapapi.js" > </script> 
+<script type="text/javascript">
+var curPage = 0; 
+var pageOn = 0;
+angular.module('ngRouteExample', ['ngRoute'])
+.controller('HomeController', function ($scope) {curPage = 0})
+.controller('ItemListController', function ($scope) {curPage = 1})
+.controller('NearbyController', function ($scope) {curPage = 2})
+.controller('SearchHistoryController', function ($scope) {curPage = 3})
+.controller('RoutingController', function ($scope) {
+	$("#submitFindWay").on("click",function() {
+		//alert($("#fromInput").val()+$("#toInput").val());
+		var start=$("#fromInput").val();
+		var end=$("#toInput").val();
+		findTheWay(start,end);
+	});
+	curPage = 4;
+	})
+.controller('MineController', function ($scope) {curPage = 5})
+.controller('detailController', function ($scope) {curPage = 7})
+.controller('CommentController', function ($scope) {
+	curPage = 6;
+	$("#lis2").hide();
+	$("#lis3").hide();
+	$("#switch1").click(function(){
+		$("#lis1").show();
+		$("#lis2").hide();
+		$("#lis3").hide();
+	});
+	$("#switch2").click(function(){
+		$("#lis2").show();
+		$("#lis1").hide();
+		$("#lis3").hide();
+	});
+	$("#switch3").click(function(){
+		$("#lis3").show();
+		$("#lis1").hide();
+		$("#lis2").hide();
+	});
+;}
+
+)
+.config(function ($routeProvider) {
+    $routeProvider.
+    when('/home', {
+        //template: 'hehehe',
+        controller: 'HomeController'
+    }).
+    when('/item', {
+        templateUrl: '/templates/htmls/iteminfo.html',
+        controller: 'ItemListController'
+    }).
+    when('/nearby', {
+        templateUrl: '/templates/htmls/Nearby.html',
+        controller: 'NearbyController'
+    }).
+    when('/searchhistory', {
+        templateUrl: '/templates/htmls/SearchHistory.html',
+        controller: 'SearchHistoryController'
+    }).
+    when('/routing', {
+        templateUrl: '/templates/htmls/Routing.html',
+        controller: 'RoutingController'
+    }).
+    when('/mine', {
+        templateUrl: '/templates/htmls/Mine.html',
+        controller: 'MineController'
+    }).
+    when('/detail', {
+        templateUrl: '/templates/htmls/detail.html',
+        controller: 'detailController'
+    }).
+    when('/comment', {
+        templateUrl: '/templates/htmls/comment.html',
+        controller: 'CommentController'
+    }).
+    otherwise({
+        redirectTo: '/home'
+    });
+});
+
+$(document).ready(function(){
+	  $("#backtomap").click(function(){
+	    $("#contentpanal").fadeOut();
+	    pageOn = 0;
+	  });
+	  $("#layerpanel").draggable();
+	  $("#hidebottomnav").click(function(){
+		  if (bottomNavOn){
+		  $(".switch").hide();
+		   $("#anmul").animate({
+			    width:'92px'
+			});
+		   $("#hidebottomnav").html("显示");
+		   bottomNavOn=false;
+	  		}else{
+	  			 $("#anmul").animate({
+		 			    width:'83.3%'
+		 			},function(){
+		 				$(".switch").show();
+		 	 		   $("#hidebottomnav").html("隐藏");
+		 	 		  bottomNavOn=true;
+		 			});	
+	  		}
+		});
+	});
+</script>
+
+</body>
+</html>

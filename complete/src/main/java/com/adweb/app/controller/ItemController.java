@@ -22,48 +22,84 @@ public class ItemController {
 
 	@Autowired ItemService itemService;
 	@Autowired LocationService locationService;
-
-	@RequestMapping(value = "getItemList/normal")
+	
+	//前端传来locationName,返回所有属于该location的item
+	@RequestMapping(value = "/getItemList/normal")
 	public @ResponseBody List<Item> getItemListNormal(@RequestBody GetItemListForm getItemListForm){
 		Location location = this.locationService.findByName(getItemListForm.getLocationName());
 		List<Item> itemList = this.itemService.findByLocation(location);
 		return itemList;
 	}
-	
-	@RequestMapping(value = "getItemList/averageRating")
+	//前端传来locationName,按照平均打分返回属于该location的item
+	@RequestMapping(value = "/getItemList/averageRating")
 	public @ResponseBody List<SendItemListForm> getItemListWithRating(@RequestBody GetItemListForm getItemListForm){
 		Location location = this.locationService.findByName(getItemListForm.getLocationName());
 		List<Item> itemList = this.itemService.findByLocation(location);
 		return sort(itemList,0);
 	}
-	
-	@RequestMapping(value = "getItemList/collect")
+	//前端传来locationName,按照收藏数返回属于该location的item
+	@RequestMapping(value = "/getItemList/collect")
 	public @ResponseBody List<SendItemListForm> getItemListWithCollect(@RequestBody GetItemListForm getItemListForm){
 		Location location = this.locationService.findByName(getItemListForm.getLocationName());
 		List<Item> itemList = this.itemService.findByLocation(location);
 		return sort(itemList,1);
 	}
-	
-	@RequestMapping(value = "getItemList/footstep")
+	//前端传来locationName,按照足迹数返回属于该location的item
+	@RequestMapping(value = "/getItemList/footstep")
 	public @ResponseBody List<SendItemListForm> getItemListWithFootstep(@RequestBody GetItemListForm getItemListForm){
 		Location location = this.locationService.findByName(getItemListForm.getLocationName());
 		List<Item> itemList = this.itemService.findByLocation(location);
 		return sort(itemList,2);
 	}
-	
-	@RequestMapping(value = "getItemList/wanted")
+	//前端传来locationName,按照心愿数返回属于该location的item
+	@RequestMapping(value = "/getItemList/wanted")
 	public @ResponseBody List<SendItemListForm> getItemListWithWanted(@RequestBody GetItemListForm getItemListForm){
 		Location location = this.locationService.findByName(getItemListForm.getLocationName());
 		List<Item> itemList = this.itemService.findByLocation(location);
 		return sort(itemList,3);
 	}
 	
-	@RequestMapping(value = "getItemList/recommend")
+	@RequestMapping(value = "/getItemList/recommend")
 	public @ResponseBody List<SendItemListForm> getItemListWithRecommend(@RequestBody GetItemListForm getItemListForm){
 		Location location = this.locationService.findByName(getItemListForm.getLocationName());
 		List<Item> itemList = this.itemService.findByLocation(location);
 		// need to do 
 		return null;
+	}
+	
+	//返回所有数据库内item
+	@RequestMapping(value = "/getAllItemList")
+	public @ResponseBody List<SendItemListForm> getAllItemList(){
+		List<Item> itemList = this.itemService.findAll();
+		return sort(itemList,4);
+	}
+	
+	//按照平均打分的多少返回所有item
+	@RequestMapping(value = "/getAllItemList/averageRating")
+	public @ResponseBody List<SendItemListForm> getAllItemListByRating(){
+		List<Item> itemList = this.itemService.findAll();
+		return sort(itemList,0);
+	}
+	
+	//按照收藏数的多少返回所有item
+	@RequestMapping(value = "/getAllItemList/collect")
+	public @ResponseBody List<SendItemListForm> getAllItemListByCollect(){
+		List<Item> itemList = this.itemService.findAll();
+		return sort(itemList,1);
+	}
+	
+	//按照足迹数的多少返回所有item
+	@RequestMapping(value = "/getAllItemList/footstep")
+	public @ResponseBody List<SendItemListForm> getAllItemListByFootstep(){
+		List<Item> itemList = this.itemService.findAll();
+		return sort(itemList,2);
+	}
+	
+	//按照心愿数的多少返回所有item
+	@RequestMapping(value = "/getAllItemList/wanted")
+	public @ResponseBody List<SendItemListForm> getAllItemListByWanted(){
+		List<Item> itemList = this.itemService.findAll();
+		return sort(itemList,3);
 	}
 	
 	public List<SendItemListForm> sort(List<Item> itemList,int mode){
@@ -114,16 +150,16 @@ public class ItemController {
 		}
 		
 		// 按照wanted次数大小降序排列
-				if(mode == 3){
-					 for(int i=0;i<sendItemListForm.size();i++){  
-				         for(int j=i+1;j<sendItemListForm.size();j++){  
-					         if(sendItemListForm.get(i).getWanted() < sendItemListForm.get(j).getWanted()){  
-					             swap(sendItemListForm,i,j);  
-					         }  
-					     }
-					 }
+		if(mode == 3){
+			for(int i=0;i<sendItemListForm.size();i++){  
+				for(int j=i+1;j<sendItemListForm.size();j++){  
+					if(sendItemListForm.get(i).getWanted() < sendItemListForm.get(j).getWanted()){  
+						swap(sendItemListForm,i,j);  
+					}  
 				}
-				
+			}
+		}
+		
 		return sendItemListForm;
 	}
 	

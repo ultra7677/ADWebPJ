@@ -31,5 +31,8 @@ public class ItemService {
 	public float getAverageRating(Item item){
 		return this.ratingService.calculateAverageRatingForItem(item);
 	}
-
+	
+	public List<Item> findAll(){
+		return this.itemRepository.findAll();
+	}
 }

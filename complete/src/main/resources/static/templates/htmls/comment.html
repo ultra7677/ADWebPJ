@@ -1,0 +1,126 @@
+<link rel="stylesheet" href="../css/item.css"></link>
+<link rel="stylesheet" href="../css/iteminfo.css"></link>
+<link rel="stylesheet" href="../css/comment.css"></link>
+<script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+
+
+<script type="text/javascript">
+	$(document).ready(function(){
+	//  $("div").hide();
+	});
+</script>
+
+<div class="panel panel-default" id="itemdiv">
+	<nav class="navbar navbar-default" role="navigation">
+		<div>
+			<p class="navbar-text">随评</p>
+		</div>
+		<div class="navbar-header" id="itemname">
+			<a class="navbar-brand">许哲纶</a>
+		</div>
+		<div>
+			<ul class="nav navbar-nav pull-right">
+				<li><a id="switch1">活动类型</a></li>
+				<li><a id="switch2">场景类型</a></li>
+				<li><a id="switch3">建议</a></li>
+				<li class="dropdown"><a class="dropdown-toggle"
+					data-toggle="dropdown"> 调查问卷 <b class="caret"></b>
+				</a>
+					<div class="dropdown-menu" style="padding: 20px; width: 500px">
+						<form>
+							<label for="name">请问该景点分类是否正确</label>
+							<div>
+								<label class="checkbox-inline"> <input type="radio"
+									name="optionsRadios" id="optionsRadios1" value="option1"
+									checked> 是
+								</label> <label class="checkbox-inline"> <input type="radio"
+									name="optionsRadios" id="optionsRadios2" value="option2"
+									checked> 否
+								</label>
+							</div>
+							<label for="name">请问您对该节点是否满意</label>
+							<div>
+								<label class="checkbox-inline"> <input type="radio"
+									name="optionsRadiosinline" id="optionsRadios1" value="option1"
+									checked> 非常满意
+								</label> <label class="checkbox-inline"> <input type="radio"
+									name="optionsRadiosinline" id="optionsRadios2" value="option2"
+									checked> 比较满意
+								</label> <label class="checkbox-inline"> <input type="radio"
+									name="optionsRadiosinline" id="optionsRadios3" value="option3">
+									不太满意
+								</label> <label class="checkbox-inline"> <input type="radio"
+									name="optionsRadiosinline" id="optionsRadios4" value="option4">
+									很不满意
+								</label>
+							</div>
+							<button type="submit" class="btn btn-default"
+								style="margin-top: 10px">提交</button>
+						</form>
+					</div></li>
+			</ul>
+		</div>
+	</nav>
+	
+
+	<div class="container-fluid" style="margin-bottom: 50px">
+		<div class="row-fluid well">
+			<div class="span12">
+			<div style="margin-bottom:15px">
+			<ul class="list-unstyled list-inline lis" id="lis1">
+				<li class="text-center well">
+					运动
+				</li>
+				<li class="text-center well">
+					健身
+				</li>
+				<li class="text-center well">
+					交往
+				</li>
+				<li class="text-center well">
+					观赏
+				</li>
+				<li class="text-center well">
+					休憩
+				</li>
+			</ul>
+			<ul class="list-unstyled list-inline lis" id="lis2">
+				<li class="text-center well">
+					亲近自然
+				</li>
+				<li class="text-center well">
+					锻炼健身
+				</li>
+				<li class="text-center well">
+					聚会交友
+				</li>
+				<li class="text-center well">
+					美的体验
+				</li>
+				<li class="text-center well">
+					观察学习
+				</li>
+			</ul>
+			<ul class="list-unstyled list-inline lis" id="lis3">
+				<li class="text-center well">
+					增加硬件空间
+				</li>
+				<li class="text-center well">
+					增加绿色空间
+				</li>
+				<li class="text-center well">
+					增加设施
+				</li>
+				<li class="text-center well">
+					改善公共交通
+				</li>
+				<li class="text-center well">
+					改善步行系统
+				</li>
+			</ul>
+			</div>
+				<img src="/imgs/bg.png" class="img-rounded img-responsive">
+			</div>
+		</div>
+	</div>
+</div>

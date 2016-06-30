@@ -10,5 +10,5 @@ import com.adweb.app.entity.User;
 
 public interface SearchHistoryRepository  extends CrudRepository<SearchHistory,Long>{
 	List<SearchHistory> findByItem(Item item);
-	List<SearchHistory> findByUSer(User user);
+	List<SearchHistory> findByUser(User user);
 }

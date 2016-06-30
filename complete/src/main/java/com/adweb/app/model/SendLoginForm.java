@@ -3,7 +3,7 @@ package com.adweb.app.model;
 public class SendLoginForm {
 
 	private int status;
-
+	
 	public int getStatus() {
 		return status;
 	}

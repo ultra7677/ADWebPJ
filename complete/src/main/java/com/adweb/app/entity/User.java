@@ -19,6 +19,17 @@ public class User {
 	
 	@Column(nullable=false)
 	private String password;
+	
+	@Column
+	private long avatarid;
+
+	public long getAvatarid() {
+		return avatarid;
+	}
+
+	public void setAvatarid(long avatarid) {
+		this.avatarid = avatarid;
+	}
 
 	public String getPassword() {
 		return password;
@@ -43,6 +54,8 @@ public class User {
 	public void setId(long id) {
 		this.id = id;
 	}
+
+
 	
 
 }

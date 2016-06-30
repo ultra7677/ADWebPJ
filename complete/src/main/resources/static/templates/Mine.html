@@ -1,0 +1,218 @@
+<!DOCTYPE html>  
+<html>  
+<head>  
+<meta charset="utf-8"/>  
+<link rel="stylesheet" href="/css/Mine.css">
+<title>登陆页面</title> 
+<script type="text/javascript" src="libs/jquery-2.1.4/jquery-2.1.4.min.js"></script>
+<script type="text/javascript"> 
+flag=0;
+function loadScript()
+{
+  document.getElementById("register").style.visibility="hidden";
+  document.getElementById('confirmloginbutton').style.visibility="hidden";
+  document.getElementById('logoutbutton').style.visibility="hidden";
+  document.getElementById("uploadimage").style.visibility="hidden";
+}
+window.onload = loadScript;
+function loginandregisterDIV()
+{
+    if(flag==0)
+    {		
+        document.getElementById("login").style.visibility="hidden";
+        document.getElementById("loginbutton").value="返回";
+        document.getElementById("registerbutton").value="确认注册";
+        document.getElementById("register").style.visibility="";
+        document.getElementById('confirmloginbutton').style.visibility="hidden";
+        flag=1;//到达注册页面
+    }
+    else
+    {
+        var username = document.getElementById("username").value;
+        var password = document.getElementById("password").value;
+        if 	((username!="")&&(password!=""))
+        addUser(username,password);
+        else{
+        	alert("账号/密码不得为空！");
+        }
+        document.getElementById("register").style.visibility="hidden";
+        document.getElementById("loginbutton").value="登陆";
+        document.getElementById("login").style.visibility="";
+        document.getElementById("registerbutton").value="注册";
+        flag=0;//完成注册，到达登录页面   
+    }
+}
+function addUser(username,password)
+{
+	
+	var data = {};
+	data["username"] = username;
+	data["password"] = password;
+	
+   $.ajax( {
+        contentType: "application/json",
+        url:'/register',
+        data:JSON.stringify(data),
+        type:'POST',
+        dataType:'json',
+        success:function(data) {
+       
+          if (data.status==1)
+            {alert("注册成功!");}
+          else{alert("该用户已被占用！")}
+        }
+    });
+}
+function loginorback()
+{
+    //按的是登陆，准备发送数据
+    if(flag==0)
+    {
+        document.getElementById("login").style.visibility="hidden";
+        document.getElementById("loginbutton").value="返回";
+        document.getElementById("register").style.visibility="";
+        document.getElementById("registerbutton").style.visibility="hidden";
+        document.getElementById("confirmloginbutton").style.visibility="";
+        flag=1;
+
+    }
+    //按的是返回，直接返回
+    else
+    {
+        document.getElementById("register").style.visibility="hidden";
+        document.getElementById("loginbutton").value="登陆";
+        document.getElementById("login").style.visibility="";
+        document.getElementById("registerbutton").style.visibility="";
+        document.getElementById("confirmloginbutton").style.visibility="";
+        document.getElementById("registerbutton").value="注册";
+        flag=0;//完成注册，到达登录页面   
+    }
+}
+function confirmlogin()
+{
+        var username = document.getElementById("username").value;
+        var password = document.getElementById("password").value;
+        login(username,password);
+        document.getElementById("register").style.visibility="hidden";
+        document.getElementById("loginbutton").value="登陆";
+        document.getElementById("login").style.visibility="";
+        document.getElementById("registerbutton").style.visibility="";
+        document.getElementById("confirmloginbutton").style.visibility="";
+        flag=0;//完成登陆，判断是否正确   
+     
+}
+function login(username,password)
+{
+   var data = {};
+   data["username"] = username;
+   data["password"] = password;
+   $.ajax({
+        contentType: "application/json",
+        url:'/login',
+        data:JSON.stringify(data),
+        type:'POST',
+        cache:false, dataType:'json',
+        success:function(data) {      
+            if (data.status==1){
+            alert('登录成功')
+            changename(username,data.src);
+            document.getElementById("myphoto").src = "/getImage/"+username;
+            document.getElementById("uploadimage").style.visibility="";
+        }else if(data.status==0){
+            alert('无此用户');
+        }else if(data.status==-1){
+            alert('密码错误')
+        }
+    }
+    });
+}
+function changename(username,image)
+{
+  window.sessionStorage.username = username;
+  //getElementById("myphoto").src=image;
+  document.getElementById("currentusername").innerHTML=username;
+  document.getElementById("loginbutton").style.visibility='hidden';
+  document.getElementById("registerbutton").style.visibility='hidden';
+  document.getElementById("logoutbutton").style.visibility='';
+}
+function logout()
+{
+  window.sessionStorage.username = null;
+  document.getElementById("myphoto").src="/imgs/beforelogin.jpg";
+  document.getElementById("currentusername").innerHTML="未登录";
+  document.getElementById("loginbutton").style.visibility='';
+  document.getElementById("registerbutton").style.visibility='';
+  document.getElementById("logoutbutton").style.visibility='hidden';
+}
+
+function changeimage(input)
+{
+	//alert(input.files);
+	if(input.files[0]){
+		var reader = new FileReader();
+		 reader.onload = function (e) {
+             $('#myphoto')
+                 .attr('src', e.target.result)
+                 .width(100)
+                 .height(100);
+             
+            var data = {};
+            data["username"] = window.sessionStorage.username;
+            data["filename"] = input.files[0].name;
+            data["data"] = e.target.result;
+            $.ajax({
+            	contentType: "application/json",
+            	url:"/addImage",
+            	type:"POST",
+            	data:JSON.stringify(data),
+            	success:function(data) {
+            		alert(data);	 
+            	}
+            })
+		 }
+		 reader.readAsDataURL(input.files[0]);
+	}
+}
+</script>
+<body>
+ <div id='myinfo'>
+      <img id="myphoto" src="imgs/beforelogin.jpg" alt="avatar">
+      <div class="my-div">
+        <p id='currentusername'>未登录</p>
+        <nobr>
+        <input type='button' class="button" id ='registerbutton' onclick="loginandregisterDIV()" value='注册'></input>
+        <input type='button' class="button" id='loginbutton' value='登陆' onclick='loginorback()'></input>
+        <nobr>
+      </div>
+      <input type='button' class='button' id='logoutbutton' onclick='logout()' value='注销'></input>
+      <a href="https://github.com/login/oauth/authorize?client_id=0f1fa28b5e41de6d3b4f&state＝xxx&redirect_uri=http:127.0.0.1:8080/login.html">点此第三方登录</a>
+      <input type='file' id="uploadimage" class='button' accept="image/*" onchange='changeimage(this)' value='上传头像'></input>
+      <div id="login">  
+        <div class="my-div">
+          <button class="longbutton">足迹</button>
+        </div>
+        <div class="my-div">
+          <button class="longbutton">心愿单</button>
+        </div>
+        <div class="my-div">
+          <button class="longbutton">收藏</button>
+        </div>
+        <div class="my-div">
+          <button class="longbutton">分享</button>
+        </div>
+        <div class="my-div">
+          <button class="longbutton">关于我们</button>
+        </div>
+      </div>
+      <div id="register">
+        <div id="newusernamediv">
+          <p>用户名<input id="username"></input>
+        </div>
+        <div id="newpassworddiv">
+          <p>密码&nbsp<input id="password"></input>
+        </div>
+          <button id='confirmloginbutton' onclick='confirmlogin()'>确认登陆</button>
+      </div>
+</div>
+</body>  
+</html>

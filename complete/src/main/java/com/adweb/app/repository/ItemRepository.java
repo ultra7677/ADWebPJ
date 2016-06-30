@@ -10,4 +10,6 @@ public interface ItemRepository  extends CrudRepository<Item,Long> {
 	Item findByName(String name);
 
 	List<Item> findByLocation(Location location);
+	
+	List<Item> findAll();
 }

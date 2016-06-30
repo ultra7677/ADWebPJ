@@ -15,14 +15,38 @@ public class Files {
 	private long id;
 	
 	@Column
-	private String fileName;
+	private String filename;
 	
 	@Column
-	private String fileLocation;
+	private String filelocation;
 	
 	@Column
-	private String type;
+	private String filetype;
 	
+	public String getFilename() {
+		return filename;
+	}
+
+	public void setFilename(String filename) {
+		this.filename = filename;
+	}
+
+	public String getFilelocation() {
+		return filelocation;
+	}
+
+	public void setFilelocation(String filelocation) {
+		this.filelocation = filelocation;
+	}
+
+	public String getFiletype() {
+		return filetype;
+	}
+
+	public void setFiletype(String filetype) {
+		this.filetype = filetype;
+	}
+
 	public long getId() {
 		return id;
 	}
@@ -30,28 +54,6 @@ public class Files {
 	public void setId(long id) {
 		this.id = id;
 	}
-	
-	public String getFileName() {
-		return fileName;
-	}
-	
-	public void setFileName(String fileName) {
-		this.fileName = fileName;
-	}
-	
-	public String getFileLocation() {
-		return fileLocation;
-	}
-	
-	public void setFileLocation(String fileLocation) {
-		this.fileLocation = fileLocation;
-	}
-	
-	public String getType() {
-		return type;
-	}
-	
-	public void setType(String type) {
-		this.type = type;
-	}
+
+
 }
