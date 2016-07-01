@@ -19,6 +19,15 @@ public class SearchHistoryService {
 		return searchHistory;
 	}
 	
+	public boolean exist(SearchHistory searchHistory){
+		List<SearchHistory> searchList = this.searchHistoryRepository.findByUser(searchHistory.getUser());
+		for(SearchHistory history: searchList){
+			if (history.getItem().getId() == searchHistory.getItem().getId() )
+				return true;
+		}
+		return false;
+	}
+	
 	public List<SearchHistory> findByUser(User user){
 		return this.searchHistoryRepository.findByUser(user);
 	}

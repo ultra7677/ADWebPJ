@@ -24,6 +24,7 @@ import com.adweb.app.model.GetItemListForm;
 import com.adweb.app.model.SendItemForm;
 import com.adweb.app.model.SendItemListForm;
 import com.adweb.app.model.ToForm;
+import com.adweb.app.model.UsernameForm;
 import com.adweb.app.recommend.KNN;
 import com.adweb.app.service.CollectService;
 import com.adweb.app.service.FootstepService;
@@ -260,6 +261,51 @@ public class ItemController {
 	public @ResponseBody List<SendItemListForm> getAllItemListByWanted(){
 		List<Item> itemList = this.itemService.findAll();
 		return sort(itemList,3);
+	}
+	
+	//根据所有item进行推荐
+	@RequestMapping(value = "/getAllItemList/recommend")
+	public @ResponseBody List<SendItemListForm> getAllItemListByRecommend(@RequestBody UsernameForm usernameForm){
+		List<Item> itemList = new ArrayList<Item>();
+		User user = this.userService.findByUsername(usernameForm.getUsername());
+		// need to do 
+		int[][] rating = new int[10][10];
+		List<Rating> ratingList = this.ratingService.findAll();
+		for(Rating ratingObj : ratingList){
+			long userId = ratingObj.getUser().getId();
+			long itemId = ratingObj.getItem().getId();
+			rating[(int) userId][(int) itemId] = ratingObj.getRatingvalue();
+		}
+		KNN knn = new KNN();
+		
+		double[] predictRating = knn.recommendForUser(rating, (int)user.getId());
+
+		long[] index = new long[7];
+		for(int i=1; i<=6; i++) index[i] = i;
+		
+		 for(int i=1;i<=5;i++){  
+	         for(int j=i+1;j<=6;j++){  
+		         if(predictRating[i] < predictRating[j]){  
+		             double s = predictRating[i];
+		             predictRating[i] = predictRating[j];
+		             predictRating[j] = s;
+		             long ss = index[i];
+		             index[i] = index[j];
+		             index[j] = ss;
+		         }
+		     }
+		 }
+		 
+	
+		
+		for(int i=1;i<=6;i++)
+		if(predictRating[i] > 0)
+		{
+			Item singleItem = this.itemService.findById(index[i]);
+			itemList.add(singleItem);
+		}
+		//itemList.add(this.itemService.findById(index));
+		return sort(itemList,4);
 	}
 	
 	//按照平均打分返回用户搜索过的所有item

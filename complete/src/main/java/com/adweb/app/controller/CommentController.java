@@ -31,6 +31,7 @@ public class CommentController {
 	public @ResponseBody void addComment(@RequestBody CommentForm commentForm){
 		String username = commentForm.getUsername();
 		String text = commentForm.getText();
+		String imagename = commentForm.getImagename();
 		int ratingValue = commentForm.getScore();
 		
 		User user = this.userService.findByUsername(username);
@@ -47,6 +48,8 @@ public class CommentController {
 		comment.setUser(user);
 		comment.setRatingValue(ratingValue);
 		comment.setText(text);
+		comment.setImagename(imagename);
+		
 		this.commentService.create(comment);
 	}
 }

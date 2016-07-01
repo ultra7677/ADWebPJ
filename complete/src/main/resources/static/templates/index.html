@@ -17,14 +17,15 @@ $(document).on("click", "#submit_button", function() {
  	//alert(username);
  	//alert(password);
 	var data = {};
-	data["locationName"] = "博物馆";
+	data["itemid"] = "1";
 	data["username"] = "Songhaolun";
- //	data["text"] = "This is my fucking comment";
- //	data["score"] = "5";
+ 	data["text"] = "This is my fucking comment";
+ 	data["score"] = "5";
+ 	data["imagename"] = "";
  	$.ajax({
  		type:"POST",
  		contentType: "application/json",
- 		url:"/getItemList/recommend",
+ 		url:"/addCommentToItem",
  	    data: JSON.stringify(data),
  	    dataType: 'json',
 		success : function(data) {

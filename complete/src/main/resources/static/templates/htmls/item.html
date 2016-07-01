@@ -7,72 +7,65 @@
 <script type="text/javascript">
 	console.log("ItemHTML.script IS BEEN RUN");
 
-	var JsonSEND = JSON.stringify( {"username": "user1", "locationName": "shanghai"});  
+	var JsonSEND = JSON.stringify( {"username": "Banzao", "locationName": "shanghai"});  
  	var JsonGET = JSON.parse('[{"id" : 1,"name": "迪士尼", "averageRating": 52.6,"collect" : 80,"footstep" : 258,"wanted" : 120,"recommend" : 520},{"id" : 2,"name": "外滩", "averageRating": 58.6,"collect" : 80,"footstep" : 258,"wanted" : 120,"recommend" : 520},{"id" : 3,"name": "WallStreet", "averageRating": 22.6,"collect" : 80,"footstep" : 258,"wanted" : 120,"recommend" : 520}, {"id" : 4,"name": "复旦大学", "averageRating": 99.1,"collect" : 80,"footstep" : 258,"wanted" : 120,"recommend" : 520}]');  
 	var RatingKey = 'averageRating';
  	var locationlist;
  	var locationNow;
 
- 	function getLocations(){
- 		var data1 = {};
+ 	//var username="Banzhao";
+ 	var username=window.sessionStorage.username;
+ 	function BEENCLICK(itemBeenClicked){
+ 		nowItem=itemBeenClicked;
+
+ 	 	//var username="Banzhao";
+ 	 	var username=window.sessionStorage.username;
+ 		//var ClickSendHistory=JSON.parse('{"username":"'+ username+'", "itemid" : '+itemBeenClicked+'}');
+ 		var data = {};
+ 		data["username"] = username;
+ 		data["itemid"] = itemBeenClicked;
  		
- 		$.ajax({
-	 		type:"GET",
+		//console.log("POSTING /sendSearchHistory/" );
+		//console.log(ClickSendHistory);
+	 	$.ajax({
+	 		type:"POST",
 	 		contentType : 'application/json',
-	 		url:"/getLocationList",
+	 		url:"/sendSearchHistory",
 	 		dataType:"json",
-	 		data : JSON.stringify(data1),
+	 		data: JSON.stringify(data),
 	 	    success : function(data) {  
 	 	  		console.log(data);
-	 	  		locationlist=data;
-	 	  		locationNow=data[0];
-	 	  		$("#locationButtomBar").empty();
-	 	  		for(var i=0;i<data.length;i++){
-	 	  			$("#locationButtomBar").append('<button type="button" id='+data[i]["id"]+' value='+i+' class="btn btn-default">'+data[i]["name"]+'</button>');
-	 	  			var il=data[i]["id"]; 
-	 	  			$("#"+il).click( function(){
-	 	  				locationNow = locationlist[this.value]; 
-	 	  				itemShow(RatingKey);
-					console.log(locationNow);
-	 	  			}	);
-	 	  		}
-	 	  		
-	 	  		itemShow('averageRating');
 	 	     },  
 	 	    error : function() {  
-	      		alert('Err...');  
-	 	    },		
-	 	     done : function(e) {
-				console.log("DONE");
-			}
+	      		alert('HistorySend Err...');  
+	 	    }
 	 	});
  		
  	}
-	
-	function itemShow(Ratingkey){ 
-		$("#itembar").empty();
-		var username ="Banzhao";
-		//username= <%=Session["username"] %>;
-		var JsonSEND = JSON.stringify( {"username": username, "locationName": locationNow["name"]});  
+ 	
+	function itemShow_item(iRatingkey){ 
+		$("#itembar_i").empty();
+		//var username ="Banzhao";
+		var username= window.sessionStorage.username;
+		var JsonSEND = JSON.stringify( {"username": username});  
 	 	
-		console.log("POSTING /gitList/"+Ratingkey);
+		console.log("POSTING /gitList/"+iRatingkey);
 		console.log(JsonSEND);
 	 	$.ajax({
 	 		type:"POST",
 	 		contentType : 'application/json',
-	 		url:"/getItemList/"+Ratingkey,
+	 		url:"/getAllItemList/"+iRatingkey,
 	 		dataType:"json",
 	 		data:JsonSEND,
 	 	    success : function(data) {  
 	 	  		console.log(data);
 	 	  		JsonGET=data;
 	 	  		
-	 	  		
+	 	  		$("#itembar_i").empty();
 	 	  	 for(var i=0,l=JsonGET.length;i<l;i++){  
 
-	 	  	 	 $("#itembar").append('<li class="list-group-item" id='+JsonGET[i]["id"]+'><span class="badge">'+ Ratingkey+':'+JsonGET[i][Ratingkey]+'</span>'+JsonGET[i]["name"]+'</li>');
-	 	  	 	   for(var key in JsonGET[i])
-	 	  	 	   console.log(key+' '+JsonGET[i][key]);
+	 	  	 	 $("#itembar_i").append('<li class="list-group-item" id='+JsonGET[i]["id"]+'><a href="#/iteminfo?itemid='+JsonGET[i]["id"]+'" onclick="BEENCLICK('+JsonGET[i]["id"]+')"><span class="badge pull-right">'+ iRatingkey+':'+JsonGET[i][iRatingkey]+'</span>'+JsonGET[i]["name"]+'</a></li>');
+
 	 	  	 	   }
 	 	  		
 	 	     },  
@@ -89,17 +82,17 @@
 	
 	function itemShowByKey(key,Ratingkey){
 		if (key == "") {
-			itemShow(RatingKey);
+			itemShow_item(RatingKey);
 			return;
 		} 
-		$("#itembar").empty();
+		$("#itembar_i").empty();
 		var name;
 	 	for(var i=0,l=JsonGET.length;i<l;i++){  
 	 		name=JsonGET[i]["name"];
 			console.log('\nsearch item'+name+" with key :"+ key);
 	 		if (name.indexOf(key) != -1){
 	 			console.log('\nsearch item'+name+'get');
-	 	 		$("#itembar").append('<li class="list-group-item" id='+JsonGET[i]["id"]+'><span class="badge">'+ Ratingkey+':'+ JsonGET[i][Ratingkey]+'</span>'+JsonGET[i]["name"]+'</li>');
+	 	 		$("#itembar_i").append('<li class="list-group-item" id='+JsonGET[i]["id"]+'><a href="#/iteminfo?itemid='+JsonGET[i]["id"]+'" onclick="BEENCLICK('+JsonGET[i]["id"]+')"><span class="badge pull-right">'+ Ratingkey+':'+ JsonGET[i][Ratingkey]+'</span>'+JsonGET[i]["name"]+'</a></li>');
 			}
 	 	}
 		
@@ -112,11 +105,10 @@ $(document).ready(function(){
 
 
 	
-	
- 	console.log(JsonGET);
+	itemShow_item('averageRating');
 
-	locationlist = getLocations();
-	console.log(locationlist);
+//	locationlist = getLocations();
+
 
 
 	$('#searchinput').bind('input propertychange', function() {  
@@ -126,30 +118,30 @@ $(document).ready(function(){
 	
 	$("#PINGFEN").click(function(){
 
-		itemShow('averageRating');
+		itemShow_item('averageRating');
 		RatingKey='averageRating';
 	});
 	  
 	  $("#SHOUCANG").click(function(){
 
-			itemShow('collect');
+			itemShow_item('collect');
 			RatingKey='collect';
 	  }); 
 	  
 	  
 	  
 	  $("#ZUJI").click(function(){
-			itemShow('footstep');
+			itemShow_item('footstep');
 			RatingKey='footstep';
 	  });   
 	  
 	  $("#XINGYUAN").click(function(){
-			itemShow('wanted');
+			itemShow_item('wanted');
 			RatingKey='wanted';
 	  }); 
 	  
 	  $("#TUIJIAN").click(function(){
-			itemShow('recommend');
+			itemShow_item('recommend');
 			RatingKey='recommend';
 	  }); 
 	  
@@ -163,12 +155,7 @@ $(document).ready(function(){
 <div class="panel panel-default" id = "itemdiv">
 
 
-<div class="btn-toolbar" role="toolbar"  >
-  <div class="btn-group" id="locationButtomBar">
-  <button type="button" class="btn btn-default">b</button>
-  <button type="button" class="btn btn-default">b</button>
-  <button type="button" class="btn btn-default">b</button>
- </div>
+
 
 
 <div class="row" >
@@ -184,7 +171,7 @@ $(document).ready(function(){
 <br>
 
 
-<ul class="list-group" id="itembar">
+<ul class="list-group" id="itembar_i">
 
 </ul>
 

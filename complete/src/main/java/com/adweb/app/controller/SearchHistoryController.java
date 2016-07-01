@@ -27,7 +27,7 @@ public class SearchHistoryController {
 	@RequestMapping(value = "/sendSearchHistory")
 	public @ResponseBody void sendSearchHistory(@RequestBody HistoryForm historyForm){
 		String username = historyForm.getUsername();
-		long itemId = historyForm.getItemId();
+		long itemId = historyForm.getItemid();
 		
 		User user = this.userService.findByUsername(username);
 		Item item = this.itemService.findById(itemId);
@@ -35,8 +35,9 @@ public class SearchHistoryController {
 		SearchHistory searchHistory = new SearchHistory();
 		searchHistory.setItem(item);
 		searchHistory.setUser(user);
-		this.searchHistoryService.create(searchHistory);
 		
+		if(!this.searchHistoryService.exist(searchHistory))
+			this.searchHistoryService.create(searchHistory);	
 	}
 	
 	

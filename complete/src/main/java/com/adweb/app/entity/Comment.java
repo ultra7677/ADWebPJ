@@ -33,6 +33,17 @@ public class Comment {
 	
 	@Column
 	private String text;
+	
+	@Column
+	private String imagename;
+
+	public String getImagename() {
+		return imagename;
+	}
+
+	public void setImagename(String imagename) {
+		this.imagename = imagename;
+	}
 
 	public long getId() {
 		return id;

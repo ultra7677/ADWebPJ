@@ -41,7 +41,7 @@
 					  	<ul class="nav navbar-nav pull-right">
 					      	<li class="dropdown">
 					            <a class="dropdown-toggle" data-toggle="dropdown">
-					               菜单 
+					             	  菜单 
 					               <b class="caret"></b>
 					            </a>
 					            <ul class="dropdown-menu">
@@ -64,31 +64,40 @@
    			<div class="panel-body" id="panel-body">
 	   		</div>
    		</div>
+   			<div class="panel panel-primary nav nav-pills floatpanel"
+					id="floatBox">
+					<!--  <div class="panel-heading" id="canbeDelete1">
+						<h3 class="panel-title">景点名称</h3>
+					</div>
+					<div class="panel-body"  id="canbeDelete2">
+						<ul class="nav nav-list list-unstyled" style="width: 300px;">
+							<li>评分：<span>90</span></li>
+							<li class="nav-header">照片</li>
+							<li><img src="/imgs/bg.png"
+								class="img-rounded img-responsive"></li>
+							<li class="text-center"><a href="/iteminfo" onclick="function(){ nowItem=pointList[clickMakerIndex]["id"];}">详细页面</a></li>
+						</ul>
+					</div> --> 
+					
+		</div>
             <div class = "" id="map" style="positon:fixed">
                <!--  <img src="../imgs/bg.png" class="img-rounded"> -->
             </div>
-            <div class="panel panel-default navbar-fixed-bottom col-xs-10 col-md-offset-1">
-            	<ul class="nav nav-pills">
-            	    <li>
-            	        <a href="#/item" class="switch">项目列表</a>
-            	    </li>
-            	    <li>
-            	        <a href="#/nearby" class="switch">附近</a>
-            	    </li>
-            	    <li>
-            	        <a href="#/searchhistory" class="switch">搜索历史</a>
-            	    </li>
-            	    <li>
-            	        <a href="#/routing" class="switch">路线规划</a>
-            	    </li>
-            	    <li>
-            	        <a href="#/mine" class="switch">我的</a>
-            	    </li>
-            	    <li class="pull-right">
-            	        <a href="#/home" id="backtomap">回到地图</a>
-            	    </li>
-            	</ul>
-            </div>
+            <div
+					class="panel panel-default navbar-fixed-bottom col-xs-10 col-md-offset-1"
+					id="anmul">
+					<ul class="nav nav-pills">
+						<li class="pull-left"><a id="hidebottomnav">隐藏</a></li>
+						<li class="switch"><a href="#/item">项目列表</a></li>
+						<li class="switch"><a href="#/nearby">附近</a></li>
+						<li class="switch"><a href="#/searchhistory">搜索历史</a></li>
+						<li class="switch"><a href="#/routing">路线规划</a></li>
+						<li class="switch"><a href="#/mine">我的</a></li>
+						<li class="pull-right switch"><a href="#/home" id="backtomap">回到地图</a>
+						</li>
+
+					</ul>
+				</div>
 
             <div ng-view="" class = " row-fluid col-xs-10 col-md-offset-1 tab-content" id="contentpanal" style="top:-1000px">
     		</div>
@@ -102,6 +111,10 @@
 <script type="text/javascript">
 var curPage = 0; 
 var pageOn = 0;
+var bottomNavOn = true;
+//edit by SONGHAOLUN -------------------------------------------------------------------------------------------------------------------------------------
+var nowItem = 0;
+//edit by SONGHAOLUN -------------------------------------------------------------------------------------------------------------------------------------
 angular.module('ngRouteExample', ['ngRoute'])
 .controller('HomeController', function ($scope) {curPage = 0})
 .controller('ItemListController', function ($scope) {curPage = 1})
@@ -137,9 +150,15 @@ angular.module('ngRouteExample', ['ngRoute'])
 		$("#lis1").hide();
 		$("#lis2").hide();
 	});
-;}
+;})
+//edit by SONGHAOLUN -------------------------------------------------------------------------------------------------------------------------------------
 
-)
+.controller('ItemInfoController',function ($scope, $location){
+	curPage = 8;
+	console.log("in Controller nowItem: "+nowItem);
+})
+
+//edit by SONGHAOLUN -------------------------------------------------------------------------------------------------------------------------------------
 .config(function ($routeProvider) {
     $routeProvider.
     when('/home', {
@@ -147,7 +166,7 @@ angular.module('ngRouteExample', ['ngRoute'])
         controller: 'HomeController'
     }).
     when('/item', {
-        templateUrl: '/templates/htmls/iteminfo.html',
+        templateUrl: '/templates/htmls/item.html',
         controller: 'ItemListController'
     }).
     when('/nearby', {
@@ -155,7 +174,7 @@ angular.module('ngRouteExample', ['ngRoute'])
         controller: 'NearbyController'
     }).
     when('/searchhistory', {
-        templateUrl: '/templates/htmls/SearchHistory.html',
+        templateUrl: '/templates/htmls/searchhistory.html',
         controller: 'SearchHistoryController'
     }).
     when('/routing', {
@@ -173,7 +192,13 @@ angular.module('ngRouteExample', ['ngRoute'])
     when('/comment', {
         templateUrl: '/templates/htmls/comment.html',
         controller: 'CommentController'
+    }).							
+    //edit by SONGHAOLUN -----------------------------------------------------------------------------------------------------------------------------------
+    when('/iteminfo', {
+        templateUrl: '/templates/htmls/iteminfo.html',
+        controller: 'ItemInfoController'
     }).
+  	//edit by SONGHAOLUN -------------------------------------------------------------------------------------------------------------------------------------
     otherwise({
         redirectTo: '/home'
     });

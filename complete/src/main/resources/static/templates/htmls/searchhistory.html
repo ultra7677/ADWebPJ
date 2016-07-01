@@ -6,37 +6,65 @@
 
 <script type="text/javascript">
 
-	var JsonSEND = JSON.stringify( {"username": "user1", "locationName": "shanghai"});  
+	var JsonSEND = JSON.stringify( {"username": "Banzao", "locationName": "shanghai"});  
  	var JsonGET = JSON.parse('[{"id" : 1,"name": "迪士尼", "averageRating": 52.6,"collect" : 80,"footstep" : 258,"wanted" : 120,"recommend" : 520},{"id" : 2,"name": "外滩", "averageRating": 58.6,"collect" : 80,"footstep" : 258,"wanted" : 120,"recommend" : 520},{"id" : 3,"name": "WallStreet", "averageRating": 22.6,"collect" : 80,"footstep" : 258,"wanted" : 120,"recommend" : 520}, {"id" : 4,"name": "复旦大学", "averageRating": 99.1,"collect" : 80,"footstep" : 258,"wanted" : 120,"recommend" : 520}]');  
 	var RatingKey = 'averageRating';
  	var locationlist;
  	var locationNow;
+ 	//var username="Banzhao";
+ 	username=window.sessionStorage.username;
+ 	function BEENCLICK(itemBeenClicked){
+ 		nowItem=itemBeenClicked;
 
-
+ 	 	//var username="Banzhao";
+ 	 	var username=window.sessionStorage.username;
+ 		//var ClickSendHistory=JSON.parse('{"username":"'+ username+'", "itemid" : '+itemBeenClicked+'}');
+ 		var data = {};
+ 		data["username"] = username;
+ 		data["itemid"] = itemBeenClicked;
+ 		
+		console.log("POSTING /sendSearchHistory/" );
+		//console.log(ClickSendHistory);
+	 	$.ajax({
+	 		type:"POST",
+	 		contentType : 'application/json',
+	 		url:"/sendSearchHistory",
+	 		dataType:"json",
+	 		data: JSON.stringify(data),
+	 	    success : function(data) {  
+	 	  		console.log(data);
+	 	     },  
+	 	    error : function() {  
+	      		alert('HistorySend Err...');  
+	 	    }
+	 	});
+ 		
+ 	}
 	
-	function itemShow(Ratingkey){ 
-		$("#itembar").empty();
-		var username ="Banzhao";
-		//username= <%=Session["username"] %>;
+	function itemShow_his(Ratingkey){ 
+		$("#itembar_h").empty();
+		
+		//var username="Banzhao";
+		username=window.sessionStorage.username;
 		var JsonSEND = JSON.stringify( {"username": username});  
 	 	
-		console.log("POSTING /getSearchHistory/"+Ratingkey);
+		console.log("POSTING /getSearchHistory/"+Ratingkey+"/"+username);
 		console.log(JsonSEND);
 	 	$.ajax({
 	 		type:"POST",
 	 		contentType : 'application/json',
-	 		url:"/getItemList/history/"+Ratingkey,
+	 		url:"/getSearchHistory/"+Ratingkey +"/" +username,
 	 		dataType:"json",
 	 		data:JsonSEND,
 	 	    success : function(data) {  
 	 	  		console.log(data);
 	 	  		JsonGET=data;
 	 	  		
-	 	  		
+	 	  		$("#itembar_h").empty();
 	 	  	 for(var i=0,l=JsonGET.length;i<l;i++){  
 
-	 	  	 	 $("#itembar").append('<li class="list-group-item" id='+JsonGET[i]["id"]+'><span class="badge">'+ Ratingkey+':'+JsonGET[i][Ratingkey]+'</span>'+JsonGET[i]["name"]+'</li>');
-	 	  	 	   for(var key in JsonGET[i])
+	 	  		$("#itembar_h").append('<li class="list-group-item" id='+JsonGET[i]["id"]+'><a href="#/iteminfo?itemid='+JsonGET[i]["id"]+'" onclick="BEENCLICK('+JsonGET[i]["id"]+')"><span class="badge pull-right">'+ Ratingkey+':'+JsonGET[i][Ratingkey]+'</span>'+JsonGET[i]["name"]+'</a></li>');
+	 	  		for(var key in JsonGET[i])
 	 	  	 	   console.log(key+' '+JsonGET[i][key]);
 	 	  	 	   }
 	 	  		
@@ -46,25 +74,22 @@
 	 	    }
 	 	});
 		
-
-	
-
 	}  
 	
 	
 	function itemShowByKey(key,Ratingkey){
 		if (key == "") {
-			itemShow(RatingKey);
+			itemShow_his(RatingKey);
 			return;
 		} 
-		$("#itembar").empty();
+		$("#itembar_h").empty();
 		var name;
 	 	for(var i=0,l=JsonGET.length;i<l;i++){  
 	 		name=JsonGET[i]["name"];
 			console.log('\nsearch item'+name+" with key :"+ key);
 	 		if (name.indexOf(key) != -1){
 	 			console.log('\nsearch item'+name+'get');
-	 	 		$("#itembar").append('<li class="list-group-item" id='+JsonGET[i]["id"]+'><span class="badge">'+ Ratingkey+':'+ JsonGET[i][Ratingkey]+'</span>'+JsonGET[i]["name"]+'</li>');
+	 			$("#itembar_h").append('<li class="list-group-item" id='+JsonGET[i]["id"]+'><a href="#/iteminfo?itemid='+JsonGET[i]["id"]+'" onclick="BEENCLICK('+JsonGET[i]["id"]+')"><span class="badge pull-right">'+ Ratingkey+':'+JsonGET[i][Ratingkey]+'</span>'+JsonGET[i]["name"]+'</a></li>');
 			}
 	 	}
 		
@@ -80,7 +105,7 @@ $(document).ready(function(){
 	
  	console.log(JsonGET);
 
-	itemShow(RatingKey);
+	itemShow_his('averageRating');
 
 	$('#searchinput').bind('input propertychange', function() {  
     itemShowByKey($("#searchinput").val(),RatingKey);
@@ -89,25 +114,25 @@ $(document).ready(function(){
 	
 	$("#PINGFEN").click(function(){
 
-		itemShow('averageRating');
+		itemShow_his('averageRating');
 		RatingKey='averageRating';
 	});
 	  
 	  $("#SHOUCANG").click(function(){
 
-			itemShow('collect');
+			itemShow_his('collect');
 			RatingKey='collect';
 	  }); 
 	  
 	  
 	  
 	  $("#ZUJI").click(function(){
-			itemShow('footstep');
+			itemShow_his('footstep');
 			RatingKey='footstep';
 	  });   
 	  
 	  $("#XINGYUAN").click(function(){
-			itemShow('wanted');
+			itemShow_his('wanted');
 			RatingKey='wanted';
 	  }); 
 	  
@@ -137,7 +162,7 @@ $(document).ready(function(){
 <br>
 
 
-<ul class="list-group" id="itembar">
+<ul class="list-group" id="itembar_h">
 
 </ul>
 

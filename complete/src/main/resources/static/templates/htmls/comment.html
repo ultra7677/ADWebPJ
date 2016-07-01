@@ -1,13 +1,95 @@
 <link rel="stylesheet" href="../css/item.css"></link>
 <link rel="stylesheet" href="../css/iteminfo.css"></link>
 <link rel="stylesheet" href="../css/comment.css"></link>
-<script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
 
 
 <script type="text/javascript">
-	$(document).ready(function(){
-	//  $("div").hide();
-	});
+var down=false;
+var x,y,imgID;
+var str="";
+function sendTag(comment,kind,left,top) {
+	console.log(comment+" "+kind+" "+left+" "+top);
+	/*var JsonSEND = JSON.stringify(  {"comment":comment},
+	                                {"kind":kind},
+	                                {"left":left},
+	                                {"top":top},
+	                                {"itemName":itemName}
+	                               );  
+ 	$.ajax({
+ 		type:"POST",
+ 		contentType : 'application/json',
+ 		url:"sendTag",
+ 		dataType:"json",
+ 		data:JsonSEND,
+ 	    success : function(data) {  
+ 	  		console.log(data);
+ 	  		JsonGET=data;
+ 		   var itemList=new Array();
+ 			 for(var i=0,l=JsonGET.length;i<l;i++){  
+ 			 	   var tmp={};
+ 			 	   tmp["x"]=JsonGET[i]["latitude"];
+ 			 	   tmp["y"]=JsonGET[i]["longitude"];	 			 
+ 			 	   itemList.push(tmp); 			 	   
+ 			 	 }
+ 			locationList.push(itemList);
+ 			var index=locationList.length-1;
+ 			setLocation(locationList[index],index);
+ 	     },  
+ 	    error : function() {  
+      		alert('Err...');  
+ 	    }
+ 	});*/
+}
+var iconList={};
+function dragImage(obj){
+	console.log(iconList[obj.id]);
+if (iconList[obj.id]!=1)
+{
+iconList[obj.id]=1;
+imgID = obj;
+str="";
+x = event.x - parseInt(imgID.style.left);
+y = event.y - parseInt(imgID.style.top);
+down=true;
+}
+}
+function dragImage2(obj){
+	console.log(iconList[obj.id]);
+	if (iconList[obj.id]!=1)
+	{
+		
+	imgID = obj;
+    str=document.getElementById("inputText").value;
+	x = event.x - parseInt(imgID.style.left);
+	y = event.y - parseInt(imgID.style.top);
+	if (str.length>0)
+	{down=true;iconList[obj.id]=1;}
+	//obj.append('<img  class="dragImg" src="imgs/icon1.png"  style="position:absolute;left:0px;top:0px" onMouseDown="dragImage(this)">')
+}
+}
+function cancelDrag(){
+	if (down) {
+	down=false;
+	if (str.length!="") sendTag(imgID.id+str,"3",imgID.style.left,imgID.style.top);
+	else sendTag(imgID.id.substr(0,imgID.id.length-1),imgID.id.substr(imgID.id.length-1,1),imgID.style.left,imgID.style.top);
+	}
+}	
+
+
+//alert(imgID.style.left+" "+imgID.style.top)};
+function moveImage(){
+if(down){
+  imgID.style.left  = event.x-x ;
+  imgID.style.top   = event.y-y ;
+  event.returnValue = false;
+}
+}
+
+
+
+document.onmousemove = moveImage;
+document.onmouseup = cancelDrag;
+
 </script>
 
 <div class="panel panel-default" id="itemdiv">
@@ -68,58 +150,118 @@
 			<div class="span12">
 			<div style="margin-bottom:15px">
 			<ul class="list-unstyled list-inline lis" id="lis1">
-				<li class="text-center well">
-					运动
+				<li class="text-center well" style="height:50px;">
+				   <div id="运动1"  style="position:absolute;left:140px;top:144px;"
+				    onMouseDown="dragImage(this)">
+				    <img  class="dragImg" src="imgs/icon1.png" >
+					<div> 运动 </div>
+					</div>
 				</li>
-				<li class="text-center well">
-					健身
+				<li  class="text-center well" style="height:50px;">
+					   <div id="健身1" style="position:absolute;left:280px;top:144px"
+				    onMouseDown="dragImage(this)">
+				    <img  class="dragImg" src="imgs/icon1.png" >
+					<div> 健身 </div>
+					</div>
+				  </li>
+				<li class="text-center well" style="height:50px;">
+				   <div  id="交往1" style="position:absolute;left:420px;top:144px"
+				    onMouseDown="dragImage(this)">
+				    <img  class="dragImg" src="imgs/icon1.png" >
+					<div> 交往 </div>
+					</div>
 				</li>
-				<li class="text-center well">
-					交往
+				<li class="text-center well" style="height:50px;">
+				   <div id="观赏1"  style="position:absolute;left:560px;top:144px"
+				    onMouseDown="dragImage(this)">
+				    <img  class="dragImg" src="imgs/icon1.png" >
+					<div> 观赏</div>
+					</div>
 				</li>
-				<li class="text-center well">
-					观赏
-				</li>
-				<li class="text-center well">
-					休憩
+				<li class="text-center well" style="height:50px;">
+				   <div id="休憩1"  style="position:absolute;left:700px;top:144px"
+				    onMouseDown="dragImage(this)">
+				    <img  class="dragImg" src="imgs/icon1.png" >
+					<div> 休憩</div>
+					</div>
 				</li>
 			</ul>
 			<ul class="list-unstyled list-inline lis" id="lis2">
-				<li class="text-center well">
-					亲近自然
+				<li  class="text-center well" style="height:50px;">
+				  <div id="亲近自然2" style="position:absolute;left:140px;top:144px;"
+				    onMouseDown="dragImage(this)">
+				    <img  class="dragImg" src="imgs/icon1.png" >
+					<div> 亲近自然</div>
+				 </div>
 				</li>
-				<li class="text-center well">
-					锻炼健身
+				<li  class="text-center well" style="height:50px;">
+				  <div id="健身锻炼2" style="position:absolute;left:280px;top:144px"
+				    onMouseDown="dragImage(this)">
+				    <img  class="dragImg" src="imgs/icon1.png" >
+					<div> 健身锻炼</div>
+					</div>
 				</li>
-				<li class="text-center well">
-					聚会交友
+				<li  class="text-center well" style="height:50px;">
+				   <div id="聚会交友2" style="position:absolute;left:420px;top:144px"
+				    onMouseDown="dragImage(this)">
+				    <img  class="dragImg" src="imgs/icon1.png" >
+					<div> 聚会交友</div>
+					</div>
 				</li>
-				<li class="text-center well">
-					美的体验
+			   <li class="text-center well" style="height:50px;">
+				   <div  id="美的体验2" style="position:absolute;left:560px;top:144px"
+				    onMouseDown="dragImage(this)">
+				    <img  class="dragImg" src="imgs/icon1.png" >
+					<div> 美的体验</div>
+					</div>
 				</li>
-				<li class="text-center well">
-					观察学习
+				<li class="text-center well" style="height:50px;">
+				   <div id="观赏学习2"  style="position:absolute;left:700px;top:144px"
+				    onMouseDown="dragImage(this)">
+				    <img  class="dragImg" src="imgs/icon1.png" >
+					<div> 观赏学习</div>
+					</div>
 				</li>
 			</ul>
 			<ul class="list-unstyled list-inline lis" id="lis3">
-				<li class="text-center well">
-					增加硬件空间
+				<li  class="text-center well" style="height:50px;">
+				   <div id="增加硬件空间3" style="position:absolute;left:140px;top:144px"
+				    onMouseDown="dragImage(this)">
+				    <img  class="dragImg" src="imgs/icon1.png" >
+					<div> 增加硬件空间</div>
+					</div>
 				</li>
-				<li class="text-center well">
-					增加绿色空间
+				<li  class="text-center well" style="height:50px;">
+				   <div id="增加绿色空间 3" style="position:absolute;left:280px;top:144px"
+				    onMouseDown="dragImage(this)">
+				    <img  class="dragImg" src="imgs/icon1.png" >
+					<div> 增加绿色空间</div>
+					</div>
 				</li>
-				<li class="text-center well">
-					增加设施
+				<li class="text-center well" style="height:50px;">
+				  <div id="增加设施" style="position:absolute;left:420px;top:144px"
+				    onMouseDown="dragImage2(this)">
+					<img  class="dragImg" src="imgs/icon1.png">
+					<div>增加设施 <input id="inputText" type="text" style="width:40px;"></input></div>
+				  </div>
 				</li>
-				<li class="text-center well">
-					改善公共交通
+				<li class="text-center well" style="height:50px;">
+				   <div id="改善公共交通3" style="position:absolute;left:560px;top:144px"
+				    onMouseDown="dragImage(this)">
+				    <img  class="dragImg" src="imgs/icon1.png" >
+					<div> 改善公共交通</div>
+					</div>
 				</li>
-				<li class="text-center well">
-					改善步行系统
+				<li class="text-center well" style="height:50px;">
+				   <div id="改善步行系统3" style="position:absolute;left:700px;top:144px"
+				    onMouseDown="dragImage(this)">
+				    <img  class="dragImg" src="imgs/icon1.png" >
+					<div> 改善步行系统</div>
+					</div>
 				</li>
 			</ul>
 			</div>
-				<img src="/imgs/bg.png" class="img-rounded img-responsive">
+				<img src="/imgs/和平公园.png" class="img-rounded img-responsive">
 			</div>
 		</div>
 	</div>

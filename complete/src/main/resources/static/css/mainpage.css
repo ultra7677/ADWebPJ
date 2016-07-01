@@ -17,3 +17,10 @@
 	background-color:white;
 	z-index: 1;
 }
+.floatpanel{
+	position:absolute;
+	background-color:white;
+	z-index: 2;
+	top:200px;
+	left:200px;
+}

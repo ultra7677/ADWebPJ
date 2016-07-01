@@ -6,9 +6,172 @@
 
 <div class="panel panel-default" id = "itemdiv">
 <script>
-    jQuery(document).ready(function () {
-        $("#input-1").rating();
-    });
+
+var SEND = JSON.stringify({"itemId": nowItem});   
+var GET = JSON.parse('{"name": "环球金融中心","oneStar" : 36,"twoStar" : 45,"threeStar" : 28,"fourStar": 68,"fiveStar" : 88,"baseContent" : "上海环球金融中心是位于中国上海陆家嘴的一栋摩天大楼，2008年8月29日竣工。楼高492米，地上101层，是目前中国第3高楼（截至2014年）世界最高的平顶式大楼。"}');  
+
+
+function showMapImage(itemid_m){
+	
+	$("#itemimg").attr("src","/getItemImage/"+itemid_m);
+	
+}
+
+
+	console.log("there itemid is :"+nowItem);
+	
+	
+	
+	
+	
+	
+ 	$.ajax({
+ 		type:"POST",
+ 		contentType : 'application/json',
+ 		url:"/getItemById/"+nowItem,
+ 		dataType:"json",
+ 		data:SEND,
+ 	    success : function(data) {  
+ 	  		console.log(data);
+ 	  		GET=data;
+ 	  		
+ 	  		$("#itemname a").html(GET["name"]);
+ 	  		$("#oneStar").html(GET["oneStar"]);
+ 	  		$("#twoStar").html(GET["twoStar"]);
+ 	  		$("#threeStar").html(GET["threeStar"]);
+ 	  		$("#fourStar").html(GET["fourStar"]);
+ 	  		$("#fiveStar").html(GET["fiveStar"]);
+ 	  		$("#baseContent").html(GET["baseContent"]);
+ 	  		
+ 	  		showMapImage(nowItem);
+
+ 	     },  
+ 	    error : function() {  
+      		alert('Err...');  
+ 	    }
+ 	});
+	
+	
+
+ 	//var username="Banzhao";
+ 	username=window.sessionStorage.username;
+	var JSEND = JSON.stringify({"itemId": nowItem,"username" : username}); 
+	$("#toCollect").click(function(){
+	 	$.ajax({
+	 		type:"POST",
+	 		contentType : 'application/json',
+	 		url:"/toCollect",
+	 		dataType:"json",
+	 		data:JSEND,
+	 	    success : function(data) {  
+	 	  		alert("收藏成功！");
+	 	     },  
+	 	    error : function() {  
+	      		alert('Err...');  
+	 	    }
+	 	});
+	});
+	$("#toShare").click(function(){
+	 	$.ajax({
+	 		type:"POST",
+	 		contentType : 'application/json',
+	 		url:"/toShare",
+	 		dataType:"json",
+	 		data:JSEND,
+	 	    success : function(data) {  
+	 	    	alert("分享成功！");
+	 	     },  
+	 	    error : function() {  
+	      		alert('Err...');  
+	 	    }
+	 	});
+	});
+	$("#toStep").click(function(){
+	 	$.ajax({
+	 		type:"POST",
+	 		contentType : 'application/json',
+	 		url:"/toStep",
+	 		dataType:"json",
+	 		data:JSEND,
+	 	    success : function(data) {  
+	 	    	alert("成功加入足迹！");
+	 	     },  
+	 	    error : function() {  
+	      		alert('Err...');  
+	 	    }
+	 	});
+	});
+	$("#toWanted").click(function(){
+	 	$.ajax({
+	 		type:"POST",
+	 		contentType : 'application/json',
+	 		url:"/toWanted",
+	 		dataType:"json",
+	 		data:JSEND,
+	 	    success : function(data) {  
+	 	    	alert("加入心愿成功！");
+	 	     },  
+	 	    error : function() {  
+	      		alert('Err...');  
+	 	    }
+	 	});
+	});
+	
+	$("#toComment").click(function(){
+		var score= $("#input-1").val();
+		var text = $("#commentTEXT").val();
+		input=$("#inputfile");
+		
+		var JsonComment = {};
+		JsonComment["itemid"]=nowItem;
+		JsonComment["username"]=username;
+		JsonComment["score"]=score;
+		JsonComment["text"]=text;
+		if (input.files[0]]){
+			JsonComment["imagename"]= input.files[0].name;
+		}else{
+			JsonComment["imagename"]= "";
+		}
+        $.ajax({
+        	contentType: "application/json",
+        	url:"/addCommentToItem",
+        	type:"POST",
+        	data:JSON.stringify(data),
+        	success:function(data) {
+        		alert(data);	 
+        	}
+        });
+		
+		
+		if(input.files[0]){
+			var reader = new FileReader();
+			 reader.onload = function (e) {
+	             
+	            var data = {};
+	            data["itemid"] = nowItem;
+	            data["filename"] = input.files[0].name;
+	            data["data"] = e.target.result;
+	            $.ajax({
+	            	contentType: "application/json",
+	            	url:"/addImageToItem",
+	            	type:"POST",
+	            	data:JSON.stringify(data),
+	            	success:function(data) {
+	            		alert(data);	 
+	            	}
+	            })
+			 }
+			 reader.readAsDataURL(input.files[0]);
+		}
+	});
+	
+
+
+	
+	
+	
+	
+	
 </script>
 <nav class="navbar navbar-default" role="navigation">
    <div>
@@ -23,30 +186,30 @@
       	<li><a href="#/detail">详细资料</a></li>
       	<li><a href="#/comment">评价</a></li>
       	<li><a href="#">到这去</a></li>
-		 <li class="dropdown">
+		<li class="dropdown">
 			<a class="dropdown-toggle" data-toggle="dropdown">
 				我要评论 
 				<b class="caret"></b>
 			</a>
 			<div class="dropdown-menu" style="padding:20px">
-				<form role="form" id="commentform">
+				<div role="form" id="commentform">
 				   <div class="form-group">
-				      <label for="name">评价：</label><input class="pull-right" id="input-1" value="0" type="number" class="rating" min=0 max=5 step=0.5 data-size="md" >
-				      <input type="text" class="form-control" id="name" 
+				      <label for="name">评价：</label><input class="pull-right" id="input-1" value="1" type="number" class="rating" min=1 max=5 step=1 data-size="md" >
+				      <input type="text" class="form-control" id="commentTEXT" 
 				         placeholder="请留下您的评论">
 				   </div>
 				   <div class="form-group">
-				      <label for="inputfile">文件输入</label>
-				      <input type="file" id="inputfile">
+				      <label for="inputfile">选择文件</label>
+				      <input type="file" id="inputfile" onchange="changeimage(this)">
 				      <div class="alert alert-info" style="margin-top:10px">
 						 <button type="button" class="close" data-dismiss="alert">×</button>
 						<h4>
 							提示!
-						</h4> <strong>警告!</strong> 请注意你的个人隐私安全.
+						</h4>  您可以上传jpg，png，obj文件
 					</div>
 				   </div>
-				   <button type="submit" class="btn btn-default">提交</button>
-				</form>
+				   <button type="submit" class="btn btn-default" id="toComment">提交</button>
+				</div>
 			</div>
 		 </li>
 	  </ul>
@@ -69,43 +232,43 @@
 				<li>
 					<span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star"></span>
 					<span>&nbsp&nbsp</span>
-					<span>100</span>
+					<span id="fiveStar">100</span>
 				</li>
 				<li>
 					<span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star-empty"></span>
 					<span>&nbsp&nbsp</span>
-					<span>100</span>
+					<span id="fourStar">100</span>
 				</li>
 				<li>
 					<span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star-empty"></span><span class="glyphicon glyphicon-star-empty"></span>
 					<span>&nbsp&nbsp</span>
-					<span>20</span>
+					<span id="threeStar">20</span>
 				</li>
 				<li>
 					<span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star-empty"></span><span class="glyphicon glyphicon-star-empty"></span><span class="glyphicon glyphicon-star-empty"></span>
 					<span>&nbsp&nbsp</span>
-					<span>100</span>
+					<span id="twoStar">100</span>
 				</li>
 				<li>
 					<span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star-empty"></span><span class="glyphicon glyphicon-star-empty"></span><span class="glyphicon glyphicon-star-empty"></span><span class="glyphicon glyphicon-star-empty"></span>
 					<span>&nbsp&nbsp</span>
-					<span>99</span>
+					<span id="oneStar">99</span>
 				</li>
 			</ul>
 		</div>
 		<div class="span2 col-xs-2 well pull-right" style="line-height:13px;padding:19px 5px;width:130px;left:20px;margin-right:20px">
 			<ul class="nav nav-stacked nav-pills">
 				<li>
-					<a href="#">收藏</a>
+					<a href="#" id="toCollect">收藏</a>
 				</li>
 				<li>
-					<a href="#">分享</a>
+					<a href="#" id="toShare">分享</a>
 				</li>
 				<li>
-					<a href="#">加入足迹</a>
+					<a href="#" id="toStep">加入足迹</a>
 				</li>
 				<li>
-					<a href="#">加入心愿单</a>
+					<a href="#" id="toWanted">加入心愿单</a>
 				</li>
 			</ul>
 		</div>
@@ -116,7 +279,7 @@
 			<h2>
 				基本信息
 			</h2>
-			<p>
+			<p id="baseContent">
 				本可视化布局程序在HTML5浏览器上运行更加完美, 能实现自动本地化保存, 即使关闭了网页, 下一次打开仍然能恢复上一次的操作.
 			</p>
 		</div>

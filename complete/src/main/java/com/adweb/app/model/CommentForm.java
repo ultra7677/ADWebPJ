@@ -5,6 +5,7 @@ public class CommentForm {
 	private String username;
 	private int score;
 	private String text;
+	private String imagename;
 	
 	public int getItemid() {
 		return itemid;
@@ -29,5 +30,11 @@ public class CommentForm {
 	}
 	public void setText(String text) {
 		this.text = text;
+	}
+	public String getImagename() {
+		return imagename;
+	}
+	public void setImagename(String imagename) {
+		this.imagename = imagename;
 	}
 }

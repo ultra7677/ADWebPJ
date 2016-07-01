@@ -3,15 +3,45 @@
 <script type="text/javascript" src="../libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <link rel="stylesheet" href="../libs/bootstrap-3.3.5/css/bootstrap.min.css"></link>
 <link rel="stylesheet" href="../css/common.css"></link>
-
 <script type="text/javascript">
+	console.log("ItemHTML.script IS BEEN RUN");
 
-	var JsonSEND = JSON.stringify( {"username": "user1", "locationName": "shanghai"});  
+	var JsonSEND = JSON.stringify( {"username": "Banzao", "locationName": "shanghai"});  
  	var JsonGET = JSON.parse('[{"id" : 1,"name": "迪士尼", "averageRating": 52.6,"collect" : 80,"footstep" : 258,"wanted" : 120,"recommend" : 520},{"id" : 2,"name": "外滩", "averageRating": 58.6,"collect" : 80,"footstep" : 258,"wanted" : 120,"recommend" : 520},{"id" : 3,"name": "WallStreet", "averageRating": 22.6,"collect" : 80,"footstep" : 258,"wanted" : 120,"recommend" : 520}, {"id" : 4,"name": "复旦大学", "averageRating": 99.1,"collect" : 80,"footstep" : 258,"wanted" : 120,"recommend" : 520}]');  
 	var RatingKey = 'averageRating';
  	var locationlist;
  	var locationNow;
+ 	//var username="Banzhao";
+ 	var username=window.sessionStorage.username;
+ 	
+ 	function BEENCLICK(itemBeenClicked){
+ 		nowItem=itemBeenClicked;
 
+ 	 	//var username="Banzhao";
+ 	 	var username=window.sessionStorage.username;
+ 		//var ClickSendHistory=JSON.parse('{"username":"'+ username+'", "itemid" : '+itemBeenClicked+'}');
+ 		var data = {};
+ 		data["username"] = username;
+ 		data["itemid"] = itemBeenClicked;
+ 		
+		//console.log("POSTING /sendSearchHistory/" );
+		//console.log(ClickSendHistory);
+	 	$.ajax({
+	 		type:"POST",
+	 		contentType : 'application/json',
+	 		url:"/sendSearchHistory",
+	 		dataType:"json",
+	 		data: JSON.stringify(data),
+	 	    success : function(data) {  
+	 	  		console.log(data);
+	 	     },  
+	 	    error : function() {  
+	      		alert('HistorySend Err...');  
+	 	    }
+	 	});
+ 		
+ 	}
+ 	
  	function getLocations(){
  		var data1 = {};
  		
@@ -24,7 +54,7 @@
 	 	    success : function(data) {  
 	 	  		console.log(data);
 	 	  		locationlist=data;
-	 	  		locationNow=data[1];
+	 	  		locationNow=data[0];
 	 	  		$("#locationButtomBar").empty();
 	 	  		for(var i=0;i<data.length;i++){
 	 	  			$("#locationButtomBar").append('<button type="button" id='+data[i]["id"]+' value='+i+' class="btn btn-default">'+data[i]["name"]+'</button>');
@@ -50,8 +80,8 @@
 	
 	function itemShow(Ratingkey){ 
 		$("#itembar").empty();
-		var username ="Banzhao";
-		//username= <%=Session["username"] %>;
+		//var username="Banzhao";
+		username=window.sessionStorage.username;
 		var JsonSEND = JSON.stringify( {"username": username, "locationName": locationNow["name"]});  
 	 	
 		console.log("POSTING /gitList/"+Ratingkey);
@@ -66,10 +96,10 @@
 	 	  		console.log(data);
 	 	  		JsonGET=data;
 	 	  		
-	 	  		
+	 	  		$("#itembar").empty();
 	 	  	 for(var i=0,l=JsonGET.length;i<l;i++){  
 
-	 	  	 	 $("#itembar").append('<li class="list-group-item" id='+JsonGET[i]["id"]+'><span class="badge">'+ Ratingkey+':'+JsonGET[i][Ratingkey]+'</span>'+JsonGET[i]["name"]+'</li>');
+	 	  	 	 $("#itembar").append('<li class="list-group-item" id='+JsonGET[i]["id"]+'><a href="#/iteminfo?itemid='+JsonGET[i]["id"]+'" onclick="BEENCLICK('+JsonGET[i]["id"]+')"><span class="badge  pull-right">'+ Ratingkey+':'+JsonGET[i][Ratingkey]+'</span>'+JsonGET[i]["name"]+'</a></li>');
 	 	  	 	   for(var key in JsonGET[i])
 	 	  	 	   console.log(key+' '+JsonGET[i][key]);
 	 	  	 	   }
@@ -98,7 +128,7 @@
 			console.log('\nsearch item'+name+" with key :"+ key);
 	 		if (name.indexOf(key) != -1){
 	 			console.log('\nsearch item'+name+'get');
-	 	 		$("#itembar").append('<li class="list-group-item" id='+JsonGET[i]["id"]+'><span class="badge">'+ Ratingkey+':'+ JsonGET[i][Ratingkey]+'</span>'+JsonGET[i]["name"]+'</li>');
+	 	 		$("#itembar").append('<li class="list-group-item" id='+JsonGET[i]["id"]+'><a href="#/iteminfo?itemid='+JsonGET[i]["id"]+'" onclick="BEENCLICK('+JsonGET[i]["id"]+')"><span class="badge  pull-right">'+ Ratingkey+':'+ JsonGET[i][Ratingkey]+'</span>'+JsonGET[i]["name"]+'</a></li>');
 			}
 	 	}
 		
