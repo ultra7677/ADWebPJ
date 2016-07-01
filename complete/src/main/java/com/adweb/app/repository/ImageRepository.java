@@ -10,6 +10,5 @@ import com.adweb.app.entity.Item;
 
 public interface ImageRepository extends CrudRepository<Image,Long>{
 	List<Image> findByItem(Item item);
-	
-	Image findByComment(Comment comment);
+	Image findByFilename(String filename);
 }

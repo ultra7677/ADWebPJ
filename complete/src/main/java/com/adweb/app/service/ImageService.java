@@ -20,12 +20,14 @@ public class ImageService {
 		return image;
 	}
 	
+	public Image findByFilename(String filename){
+		return this.itemRepository.findByFilename(filename);
+	}
+	
 	public List<Image> findByItem(Item item){
 		return this.itemRepository.findByItem(item);
 	}
 	
-	public Image findByComment(Comment comment){
-		return this.itemRepository.findByComment(comment);
-	}
-	
+
+
 }

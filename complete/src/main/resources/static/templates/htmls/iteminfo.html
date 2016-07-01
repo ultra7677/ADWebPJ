@@ -44,7 +44,7 @@ function showMapImage(itemid_m){
  	  		$("#baseContent").html(GET["baseContent"]);
  	  		
  	  		showMapImage(nowItem);
-
+			
  	     },  
  	    error : function() {  
       		alert('Err...');  
@@ -127,7 +127,7 @@ function showMapImage(itemid_m){
 		JsonComment["username"]=username;
 		JsonComment["score"]=score;
 		JsonComment["text"]=text;
-		if (input.files[0]]){
+		if (input.files[0]){
 			JsonComment["imagename"]= input.files[0].name;
 		}else{
 			JsonComment["imagename"]= "";
@@ -216,8 +216,8 @@ function showMapImage(itemid_m){
    </div>    
 </nav>
 
-<div id="itemimg">
-	<img src="/imgs/bg.png" class="img-rounded img-responsive">
+<div>
+	<img id="itemimg" src="/imgs/bg.png" class="img-rounded img-responsive">
 </div>
 
 <div class="container-fluid" style="margin-bottom:50px">

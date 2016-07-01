@@ -25,11 +25,7 @@ public class Image {
 	
 	@Column
 	private String description;
-	
-	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "comment_id")
-	private Comment comment;
-	
+
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "item_id")
 	private Item item;
@@ -56,14 +52,6 @@ public class Image {
 
 	public void setFilelocation(String filelocation) {
 		this.filelocation = filelocation;
-	}
-
-	public Comment getComment() {
-		return comment;
-	}
-
-	public void setComment(Comment comment) {
-		this.comment = comment;
 	}
 
 	public Item getItem() {

@@ -48,10 +48,20 @@ public class Item {
 	//心愿(被加入心愿单的次数)
 	@Column
 	private int wanted;
-	
+	//景点的基本信息
 	@Column
 	private String basecontent;
+	//景点的基本图片
+	private long avatarid;
 	
+	public long getAvatarid() {
+		return avatarid;
+	}
+
+	public void setAvatarid(long avatarid) {
+		this.avatarid = avatarid;
+	}
+
 	public String getBasecontent() {
 		return basecontent;
 	}

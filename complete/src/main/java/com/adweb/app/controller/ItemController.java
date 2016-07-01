@@ -57,6 +57,7 @@ public class ItemController {
 	
 	@Autowired SearchHistoryService searchHistoryService;
 	
+
 	//用户将一个item收藏
 	@RequestMapping(value = "/toCollect")
 	public @ResponseBody void toCollect(@RequestBody ToForm toForm){
