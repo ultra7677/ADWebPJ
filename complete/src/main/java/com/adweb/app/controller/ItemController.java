@@ -15,6 +15,7 @@ import com.adweb.app.entity.Collect;
 import com.adweb.app.entity.Footstep;
 import com.adweb.app.entity.Item;
 import com.adweb.app.entity.Location;
+import com.adweb.app.entity.Rating;
 import com.adweb.app.entity.SearchHistory;
 import com.adweb.app.entity.Share;
 import com.adweb.app.entity.User;
@@ -23,6 +24,7 @@ import com.adweb.app.model.GetItemListForm;
 import com.adweb.app.model.SendItemForm;
 import com.adweb.app.model.SendItemListForm;
 import com.adweb.app.model.ToForm;
+import com.adweb.app.recommend.KNN;
 import com.adweb.app.service.CollectService;
 import com.adweb.app.service.FootstepService;
 import com.adweb.app.service.ItemService;
@@ -171,9 +173,58 @@ public class ItemController {
 	@RequestMapping(value = "/getItemList/recommend")
 	public @ResponseBody List<SendItemListForm> getItemListWithRecommend(@RequestBody GetItemListForm getItemListForm){
 		Location location = this.locationService.findByName(getItemListForm.getLocationName());
-		List<Item> itemList = this.itemService.findByLocation(location);
+		List<Item> itemList = new ArrayList<Item>();
+		User user = this.userService.findByUsername(getItemListForm.getUsername());
 		// need to do 
-		return null;
+		int[][] rating = new int[10][10];
+		List<Rating> ratingList = this.ratingService.findAll();
+		for(Rating ratingObj : ratingList){
+			long userId = ratingObj.getUser().getId();
+			long itemId = ratingObj.getItem().getId();
+			rating[(int) userId][(int) itemId] = ratingObj.getRatingvalue();
+		}
+		KNN knn = new KNN();
+		
+		double[] predictRating = knn.recommendForUser(rating, (int)user.getId());
+		
+	//	for(int j=1;j<=6;j++)
+//			System.out.println("j="+j+" "+predictRating[j]);
+//		 System.out.println();
+		long[] index = new long[7];
+		
+		for(int i=1; i<=6; i++) index[i] = i;
+		
+		 for(int i=1;i<=5;i++){  
+	         for(int j=i+1;j<=6;j++){  
+		         if(predictRating[i] < predictRating[j]){  
+		             double s = predictRating[i];
+		             predictRating[i] = predictRating[j];
+		             predictRating[j] = s;
+		             long ss = index[i];
+		             index[i] = index[j];
+		             index[j] = ss;
+		         }
+		     }
+		 }
+		 
+		/* 
+		 for(int j=1;j<=6;j++)
+				System.out.println("j="+j+" "+predictRating[j]);
+		 System.out.println();
+		 for(int j=1;j<=6;j++)
+				System.out.println("j="+j+" "+index[j]);
+		 System.out.println(); */
+		 
+		for(int i=1;i<=6;i++)
+		if(predictRating[i] > 0)
+		{
+			Item singleItem = this.itemService.findById(index[i]);
+			if (singleItem.getLocation().getName().equals(getItemListForm.getLocationName())){
+				itemList.add(singleItem);
+			}
+		}
+		//itemList.add(this.itemService.findById(index));
+		return sort(itemList,4);
 	}
 	
 	//返回所有数据库内item

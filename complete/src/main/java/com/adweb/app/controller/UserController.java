@@ -122,4 +122,17 @@ public class UserController {
 		} 
 	}
 	
+	@RequestMapping(value="/thirdPartyLogin/{username}")
+	public @ResponseBody int thirdPartyLogin(@PathVariable String username){
+		if (this.userService.exist(username))
+			return 1;
+		
+		User user = new User();
+		user.setUsername(username);
+		user.setAvatarid(1);
+		this.userService.create(user);
+		
+		return 0;
+	}
+	
 }

@@ -11,4 +11,5 @@ import com.adweb.app.entity.User;
 public interface RatingRepository extends CrudRepository<Rating,Long>{
 	List<Rating> findByItem(Item item);
 	List<Rating> findByUser(User user);
+	List<Rating> findAll();
 }

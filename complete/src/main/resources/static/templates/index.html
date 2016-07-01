@@ -17,14 +17,14 @@ $(document).on("click", "#submit_button", function() {
  	//alert(username);
  	//alert(password);
 	var data = {};
-	data["itemId"] = "3";
-	data["username"] = "Razor";
+	data["locationName"] = "博物馆";
+	data["username"] = "Songhaolun";
  //	data["text"] = "This is my fucking comment";
  //	data["score"] = "5";
  	$.ajax({
  		type:"POST",
  		contentType: "application/json",
- 		url:"/sendSearchHistory",
+ 		url:"/getItemList/recommend",
  	    data: JSON.stringify(data),
  	    dataType: 'json',
 		success : function(data) {

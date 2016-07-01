@@ -28,6 +28,10 @@ public class RatingService {
 		return this.ratingRepository.findByItem(item);
 	}
 	
+	public List<Rating> findAll(){
+		return this.ratingRepository.findAll();
+	}
+	
 	public float calculateAverageRatingForItem(Item item){
 		int sum = 0;
 		int totalNum = 0;

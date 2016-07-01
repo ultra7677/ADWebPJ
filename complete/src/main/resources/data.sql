@@ -1,5 +1,7 @@
-INSERT INTO USER (id,username,password,avatarid) VALUES(1,'Banzhao','Initial0',2);
-INSERT INTO USER (id,username,password,avatarid) VALUES(2,'Razor','Initial0',0);
+INSERT INTO USER (id,username,password,avatarid) VALUES(1,'Banzhao','$2a$10$oZypUmwqQ08EgyrIJas.U.VU700tFThPwzma6uIodtlZykRAsDft6',2);
+INSERT INTO USER (id,username,password,avatarid) VALUES(2,'Razor','$2a$10$oZypUmwqQ08EgyrIJas.U.VU700tFThPwzma6uIodtlZykRAsDft6',1);
+INSERT INTO USER (id,username,password,avatarid) VALUES(3,'Xuzhelun','$2a$10$oZypUmwqQ08EgyrIJas.U.VU700tFThPwzma6uIodtlZykRAsDft6',1);
+INSERT INTO USER (id,username,password,avatarid) VALUES(4,'Songhaolun','$2a$10$oZypUmwqQ08EgyrIJas.U.VU700tFThPwzma6uIodtlZykRAsDft6',1);
 
 INSERT INTO LOCATION (id,name) VALUES(1,'公园');
 INSERT INTO LOCATION (id,name) VALUES(2,'博物馆');
@@ -20,9 +22,18 @@ INSERT INTO RATING (id,ratingvalue,user_id,item_id) VALUES(4,4,2,1);
 INSERT INTO RATING (id,ratingvalue,user_id,item_id) VALUES(5,3,2,2);
 INSERT INTO RATING (id,ratingvalue,user_id,item_id) VALUES(6,2,2,3);
 
-INSERT INTO FILES (id,filename,fileLocation,filetype) VALUES(1,'beforelogin.jpg','/Users/ultra/Documents/images/beforelogin.jpg','image');
-INSERT INTO FILES (id,filename,fileLocation,filetype) VALUES(2,'heart.jpg','/Users/ultra/Documents/images/heart.jpg','image');
-
 INSERT INTO RATING (id,ratingvalue,user_id,item_id) VALUES(7,4,1,4);
 INSERT INTO RATING (id,ratingvalue,user_id,item_id) VALUES(8,3,2,5);
 INSERT INTO RATING (id,ratingvalue,user_id,item_id) VALUES(9,2,2,6);
+
+INSERT INTO RATING (id,ratingvalue,user_id,item_id) VALUES(10,2,3,4);
+INSERT INTO RATING (id,ratingvalue,user_id,item_id) VALUES(11,4,3,1);
+INSERT INTO RATING (id,ratingvalue,user_id,item_id) VALUES(12,2,4,2);
+INSERT INTO RATING (id,ratingvalue,user_id,item_id) VALUES(13,3,4,5);
+
+INSERT INTO RATING (id,ratingvalue,user_id,item_id) VALUES(14,4,3,6);
+INSERT INTO RATING (id,ratingvalue,user_id,item_id) VALUES(15,4,4,3);
+
+INSERT INTO FILES (id,filename,fileLocation,filetype) VALUES(1,'beforelogin.jpg','/Users/ultra/Documents/images/beforelogin.jpg','image');
+INSERT INTO FILES (id,filename,fileLocation,filetype) VALUES(2,'heart.jpg','/Users/ultra/Documents/images/heart.jpg','image');
+
