@@ -1,0 +1,58 @@
+<script src="/libs/jquery-2.1.4/jquery-2.1.4.min.js"></script>
+<script>
+function loadScript()
+{
+   var username=sessionStorage.getItem("username");
+   var data = {};	
+   $.ajax( {
+        contentType: "application/json",
+        url:'/getWantedItem/'+username,
+        data:JSON.stringify(data),
+        type:'POST',
+        dataType:'json',
+        success:function(data) {
+          console.log(data);
+          
+     	   var itembar = document.getElementById("itembar");
+    	   var contain='';
+          	 for(var i=0; i<data.length; i++){
+            {
+               contain+="<li class='list-group-item'><span class='glyphicon glyphicon-remove pull-right'></span><div class='namepad'>"+data[i].name+"</div></li>"+"<span id='itemid'style='display:none'>"+
+                '</span>'+"<button id='deletethis' onclick='deletespot(this)'>删除景点</button>";
+        	}
+          itembar.innerHTML=contain;
+          }
+       }
+    });
+}
+window.onload = loadScript();
+function deletespot(obj)
+{   
+	 var spotname=$(obj).parent().find(".namepad").html();
+	 alert(spotname);
+	 var data = {};
+		data["username"] = sessionStorage.getItem("username");
+		data["itemname"] = spotname;
+		
+	 $.ajax({
+	        contentType: "application/json",
+	        url:'/deleteWanted/'+username,
+	        data:JSON.stringify(data),
+	        type:'POST',
+	        dataType:'json',
+	        success:function(data) {
+	       }
+	    });
+	 window.location.href="http://localhost:8080/#/wanted";
+}
+</script>
+<div class="panel panel-default">
+   <div class="panel-body text-center" style="padding-top:0px;background-color:#EEEEEE">
+      <h3>我的心愿</h3>
+   </div>
+   <div style="margin-bottom:50px">
+   <ul class="list-group well" id="itembar" style="padding:10px">
+
+</ul>
+</div>
+</div>

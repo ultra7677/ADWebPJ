@@ -8,7 +8,7 @@ public class MainController {
 	 @RequestMapping(value = "/")
 	 public String loadMainPage() 
 	 {
-		   	return "templates/mainpage.html";
+		   	return "templates/scenepage.html";
 	 }
 	 
 }

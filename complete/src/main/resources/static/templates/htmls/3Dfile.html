@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<title>MGA-411 Mangusa</title>
+    <script type="text/javascript" charset="utf-8" src="../js/three.min.js"></script>
+	<style>body{overflow:hidden;background:#000}</style>
+</head>
+<body>
+	<div id="Loading" style="color:#fff">Loading...</div>
+</body>
+	<script>
+	/* 场景 */
+	var WIDTH = document.documentElement.offsetWidth || 800,
+		HEIGHT = document.documentElement.clientHeight || 600;
+	var scene = new THREE.Scene();
+	/* 摄像头 */
+	var VIEW_ANGLE = 75,
+		ASPECT = WIDTH / HEIGHT,
+		NEAR = 0.1,
+		FAR = 10000;
+	var	camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
+		camera.position.set(0, 0, 1000);
+		scene.add(camera);
+	/* 渲染器 */
+	var	renderer = new THREE.WebGLRenderer();
+		renderer.setSize(WIDTH , HEIGHT);
+		document.body.appendChild(renderer.domElement);
+	/* 灯光 */
+	var light = new THREE.DirectionalLight(0xFFFFFF);
+		light.position.set(0, 0, 99).normalize();
+		scene.add(light);
+	/* 显示对象 */
+	var material = new THREE.MeshLambertMaterial({ color: 0xcccccc, wireframe: true }),
+		obj;
+	var loader = new THREE.JSONLoader(true);
+    loader.load("../js/MGA.js", function ( geometry ) {
+		var loading = document.getElementById("Loading");
+		loading.parentNode.removeChild(loading);
+		obj = new THREE.Mesh(geometry, material);
+		obj.position.set(0,1,990);
+		scene.add(obj);
+		var start = new Date().getTime(),delta;
+		(function anime(){
+			delta = new Date().getTime() - start;
+			obj.rotation.y =   delta / 1000;
+			renderer.render(scene, camera);
+			return requestAnimationFrame(anime);
+		})();
+	});
+</script>
+</html>

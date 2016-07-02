@@ -1,0 +1,376 @@
+<link rel="stylesheet" href="../css/item.css"></link>
+<link rel="stylesheet" href="../css/iteminfo.css"></link>
+<link href="../css/star-rating.css" media="all" rel="stylesheet" type="text/css"/></link>
+<script src="../js/star-rating.js" type="text/javascript"></script>
+
+
+<div class="panel panel-default" id = "itemdiv">
+<script>
+var hidebuttonon = true;
+
+function showMapImage(itemid_m){
+	$("#itemimg").attr("src","/getItemImage/"+itemid_m);
+}
+
+var hidebutton = $("#hidebutton");
+var extrainfo = $("#extrainfo");
+hidebutton.click(function() {
+	if (hidebuttonon) {
+		$("#hidebutton").html("显示");
+		extrainfo.hide();
+		hidebuttonon = false;
+	} else {
+		$("#hidebutton").html("隐藏");
+		extrainfo.show();
+		hidebuttonon = true;
+	}
+});
+
+function showComment(itemid_C){
+	var CommentList={};
+ 	var dataSEND = {};
+	$.ajax({
+ 		type:"POST",
+ 		contentType : 'application/json',
+ 		url:"/getCommentListByItem/"+itemid_C,
+ 		dataType:"json",
+ 		data: dataSEND,
+ 	    success : function(data) {  
+ 	  		console.log(data);
+			CommentList=data;
+			
+			for (var i=0;i<CommentList.length;i++){
+				if (CommentList[i]["imagename"]){
+					var ISN= CommentList[i]["imagename"].split('.');
+					if (ISN[1]=="ogg"){
+						$("#showCommentBar").
+						append( 
+							'<li class="list-group-item" ><span class="badge  pull-right"> 评论者:'+ CommentList[i]["username"]  +'</span>'+CommentList[i]["text"]+'<video id="commentimg" src="/getImageByName/'+ ISN[0]+'/'+ISN[1] +'" controls="controls"></li>'		
+							);
+					}
+					
+
+					else if (ISN[1]=="js"){
+						$("#showCommentBar").
+						append('<div><iframe src="/3d"></iframe></div>');
+					}
+					
+					
+					else{
+						$("#showCommentBar").
+						append( 
+							'<li class="list-group-item" ><span class="badge  pull-right"> 评论者:'+ CommentList[i]["username"]  +'</span>'+CommentList[i]["text"]+'<img id="commentimg" src="/getImageByName/'+ ISN[0]+'/'+ISN[1] +'" class="img-rounded img-responsive"></li>'		
+							);
+					}
+				}
+			else{
+				$("#showCommentBar").
+				append( 
+					'<li class="list-group-item" ><span class="badge  pull-right"> 评论者:'+ CommentList[i]["username"]  +'</span>'+CommentList[i]["text"]+'</li>'		
+					);
+			}
+			}
+			
+			
+ 	     },  
+ 	    error : function() {  
+      		console.log("getCommentError!.....");
+ 	    }
+ 	});
+	
+
+}
+
+function showAllImage(item_AI){
+	var ImageList = {};
+	var dataSEND = {};
+	$.ajax({
+ 		type:"POST",
+ 		contentType : 'application/json',
+ 		url:"/getAllItemImage/"+item_AI,
+ 		dataType:"json",
+ 		data: dataSEND,
+ 	    success : function(data) {  
+ 	  		console.log(data);
+			ImageList=data;
+			for (i=0;i<ImageList.length;i++){
+			
+				if (ImageList[i]["imagename"]){
+					var ISN= ImageList[i]["imagename"].split('.');
+					if (ISN[1]=="ogg"){
+						$("#AllImage").
+						append( 
+							'<li class="list-group-item" ><video id="commentimg" src="/getImageByName/'+ ISN[0]+'/'+ISN[1] +'" controls="controls"> </video>视频描述：'+ImageList[i]["description"]+'</li>'		
+							);
+					}
+					
+					
+					else if (ISN[1]=="js"){
+						$("#AllImage").
+						append('<div><iframe src="/3d"></iframe></div>');
+					}
+					else{
+						$("#AllImage").
+						append( 
+							'<li class="list-group-item" ><img id="commentimg" src="/getImageByName/'+ ISN[0]+'/'+ISN[1] +'" class="img-rounded img-responsive">图片描述：'+ImageList[i]["description"]+'</li>'		
+							);
+					}
+			}
+			
+			}
+ 	     },  
+ 	    error : function() {  
+      		console.log("getAllImageAndVidoeError!.....");
+ 	    }
+ 	});
+	
+	
+	
+}
+
+
+
+var SEND = JSON.stringify({"itemId": nowItem});   
+var GET = JSON.parse('{"name": "环球金融中心","oneStar" : 36,"twoStar" : 45,"threeStar" : 28,"fourStar": 68,"fiveStar" : 88,"baseContent" : "上海环球金融中心是位于中国上海陆家嘴的一栋摩天大楼，2008年8月29日竣工。楼高492米，地上101层，是目前中国第3高楼（截至2014年）世界最高的平顶式大楼。"}');  
+
+
+console.log("there itemid is :"+nowItem);
+
+	$.ajax({
+		type:"POST",
+		contentType : 'application/json',
+		url:"/getItemById/"+nowItem,
+		dataType:"json",
+		data:SEND,
+	    success : function(data) {  
+	  		console.log(data);
+	  		GET=data;
+	  		
+
+	  		$("#itemname a").html(GET["name"]);
+	  		$("#oneStar").html(GET["oneStar"]);
+	  		$("#twoStar").html(GET["twoStar"]);
+	  		$("#threeStar").html(GET["threeStar"]);
+	  		$("#fourStar").html(GET["fourStar"]);
+	  		$("#fiveStar").html(GET["fiveStar"]);
+	  		$("#baseContent").html(GET["baseContent"]);
+			
+	  		showMapImage(nowItem);
+	  		showComment(nowItem);
+			 
+	  		showAllImage(nowItem);
+	     },  
+	    error : function() {  
+  		//alert('Err...'); 
+	    }
+	});
+	
+
+
+
+//var username="Banzhao";
+username=window.sessionStorage.username;
+var JSEND = JSON.stringify({"itemId": nowItem,"username" : username}); 
+$("#toCollect").click(function(){
+ 	$.ajax({
+ 		type:"POST",
+ 		contentType : 'application/json',
+ 		url:"/toCollect",
+ 		dataType:"json",
+ 		data:JSEND,
+ 	    success : function(data) {  
+ 	  		alert("收藏成功！");
+ 	     },  
+ 	    error : function() {  
+      		//alert('Err...');  
+ 	    }
+ 	});
+});
+$("#toShare").click(function(){
+ 	$.ajax({
+ 		type:"POST",
+ 		contentType : 'application/json',
+ 		url:"/toShare",
+ 		dataType:"json",
+ 		data:JSEND,
+ 	    success : function(data) {  
+ 	    	alert("分享成功！");
+ 	     },  
+ 	    error : function() {  
+      		//alert('Err...');  
+ 	    }
+ 	});
+});
+$("#toStep").click(function(){
+ 	$.ajax({
+ 		type:"POST",
+ 		contentType : 'application/json',
+ 		url:"/toStep",
+ 		dataType:"json",
+ 		data:JSEND,
+ 	    success : function(data) {  
+ 	    	alert("成功加入足迹！");
+ 	     },  
+ 	    error : function() {  
+      		//alert('Err...');  
+ 	    }
+ 	});
+});
+$("#toWanted").click(function(){
+ 	$.ajax({
+ 		type:"POST",
+ 		contentType : 'application/json',
+ 		url:"/toWanted",
+ 		dataType:"json",
+ 		data:JSEND,
+ 	    success : function(data) {  
+ 	    	alert("加入心愿成功！");
+ 	     },  
+ 	    error : function() {  
+      		//alert('Err...');  
+ 	    }
+ 	});
+});
+
+</script>
+<nav class="navbar navbar-default" role="navigation">
+   <div>
+   		<p class="navbar-text">随评</p>
+   </div>
+   <div class="navbar-header" id="itemname">
+      <a class="navbar-brand">许哲纶</a>
+   </div>   
+   <div>
+      <ul class="nav navbar-nav pull-right">
+		 <li class="dropdown">
+			<a class="dropdown-toggle" data-toggle="dropdown">
+				我要报错 
+				<b class="caret"></b>
+			</a>
+			<div class="dropdown-menu" style="padding:20px">
+				<form role="form" id="commentform">
+				   <div class="form-group">
+				      <label for="name">错误信息：</label>
+				      <input type="text" class="form-control" id="name" 
+				         placeholder="请写出错误类型以及描述">
+				   </div>
+				   <div class="form-group">
+				      <label for="inputfile">请上传错误截图</label>
+				      <input type="file" id="inputfile">
+				      <div class="alert alert-info" style="margin-top:10px">
+						 <button type="button" class="close" data-dismiss="alert">×</button>
+						<h4>
+							提示!
+						</h4> 您可以上传格jpg，png等格式的截图.
+					</div>
+				   </div>
+				   <button type="submit" class="btn btn-default">提交</button>
+				</form>
+			</div>
+		 </li>
+	  </ul>
+   </div>
+   		<div>
+			<ul class="nav navbar-nav pull-right">
+				<li>
+					<a href="#/iteminfo">返回上一页</a>
+				</li>
+
+			</ul>
+		</div>
+   
+   
+</nav>
+
+<div class="container-fluid" style="margin-bottom:50px">
+	<div class="row-fluid well" id="scorediv">
+		<div class="span2 col-xs-2 well pull-left" style="height:180px; width:60px;margin-right:20px;margin-left:0px" >
+			<h3 class="" style="margin-top:7px;">
+				满意度评分
+			</h3>
+		</div>
+		<div class="span8 col-xs-8 well" style=" height:180px;width:300; margin-top:0px">
+			<ul class="" style=" font-size:20px">
+				<li>
+					<span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star"></span>
+					<span>&nbsp&nbsp</span>
+					<span id="fiveStar">100</span>
+				</li>
+				<li>
+					<span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star-empty"></span>
+					<span>&nbsp&nbsp</span>
+					<span id="fourStar">100</span>
+				</li>
+				<li>
+					<span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star-empty"></span><span class="glyphicon glyphicon-star-empty"></span>
+					<span>&nbsp&nbsp</span>
+					<span id="threeStar">20</span>
+				</li>
+				<li>
+					<span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star-empty"></span><span class="glyphicon glyphicon-star-empty"></span><span class="glyphicon glyphicon-star-empty"></span>
+					<span>&nbsp&nbsp</span>
+					<span id="twoStar">100</span>
+				</li>
+				<li>
+					<span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star-empty"></span><span class="glyphicon glyphicon-star-empty"></span><span class="glyphicon glyphicon-star-empty"></span><span class="glyphicon glyphicon-star-empty"></span>
+					<span>&nbsp&nbsp</span>
+					<span id="oneStar">99</span>
+				</li>
+			</ul>
+		</div>
+		<div class="span2 col-xs-2 well pull-right" style="line-height:13px;padding:19px 5px;width:130px;left:20px;margin-right:20px">
+			<ul class="nav nav-stacked nav-pills">
+				<li>
+					<a  ><button  id="toCollect">收藏</button></a>
+				</li>
+				<li>
+					<a  ><button id="toShare">分享</button></a>
+				</li>
+				<li>
+					<a href="#/comment" ><button id="toStep">加入足迹</button></a>
+				</li>
+				<li>
+					<a href="#/comment" ><button id="toWanted">加入心愿单</button></a>
+				</li>
+			</ul>
+		</div>
+	</div>
+	
+	<div class="row-fluid well">
+		<div class="span12">
+			<h2>
+				基本信息
+			</h2>
+			<p id="baseContent">
+				本可视化布局程序在HTML5浏览器上运行更加完美, 能实现自动本地化保存, 即使关闭了网页, 下一次打开仍然能恢复上一次的操作.
+			</p>
+		</div>
+	</div>
+
+	<div class="row-fluid well">
+		<div class="span12" id="showCommentBar">
+			<h2>
+				他人评价
+			</h2>
+		</div>
+	</div>
+	<div class="text-center">
+		<button type="button" class="btn btn-link" id="hidebutton">
+	      隐藏
+	   </button>
+   </div>
+    <div id="extrainfo">
+	<div class="row-fluid well">
+		<div class="span12" id="AllImage">
+			<h2>照片 & 视频</h2>
+			<img src="/imgs/bg.png" class="img-rounded img-responsive" alt="这是一个测试文件~~">
+		</div>
+	</div>
+	</div>
+
+</div>
+<div>
+	
+</div>
+
+</div>

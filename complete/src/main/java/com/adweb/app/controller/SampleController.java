@@ -15,13 +15,19 @@ public class SampleController
 {
 	
 	 
-	 @RequestMapping(value = "/login.html")
+	 @RequestMapping(value = "/testUrl")
 	 public String loadLoginPage() 
 	 {
 		   	return "templates/index.html";
 	 }
 	 
+	 @RequestMapping(value = "/3d")
+	 public String d3Page() 
+	 {
+		   	return "templates/htmls/3Dfile.html";
+	 }
 	 
+	/*
 	 @RequestMapping(value = "/login")
 	 public @ResponseBody Boolean loginRequest(@RequestBody LoginForm loginForm)
 	 {
@@ -38,7 +44,7 @@ public class SampleController
 		 for (LoginForm i:jsonArray)
 	         System.out.println(i.getUsername());
           return jsonArray;
-	 }
+	 }*/
 	
 }
 	
