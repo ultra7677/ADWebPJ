@@ -21,6 +21,12 @@ public class SampleController
 		   	return "templates/index.html";
 	 }
 	 
+	 @RequestMapping(value = "/3d")
+	 public String d3Page() 
+	 {
+		   	return "templates/htmls/3Dfile.html";
+	 }
+	 
 	/*
 	 @RequestMapping(value = "/login")
 	 public @ResponseBody Boolean loginRequest(@RequestBody LoginForm loginForm)

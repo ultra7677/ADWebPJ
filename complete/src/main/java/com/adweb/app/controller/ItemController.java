@@ -57,6 +57,50 @@ public class ItemController {
 	
 	@Autowired SearchHistoryService searchHistoryService;
 	
+	//返回用户心愿单wantedList
+	@RequestMapping(value = "/getWantedItem/{username}")
+	public @ResponseBody List<SendItemListForm> getWantedItem(@PathVariable String username){
+		User user = this.userService.findByUsername(username);
+		List<Wanted> wantedList = this.wantedService.findByUser(user);
+		List<Item> itemList = new ArrayList<Item>();
+		for(Wanted wanted : wantedList){
+			Item item = wanted.getItem();
+			//SendItemListForm sendItemListForm = new SendItemListForm();
+			itemList.add(item);
+		}
+		return sort(itemList,4);
+		
+	}
+	
+	
+	//返回用户的足迹footstepList
+	@RequestMapping(value = "/getFootstepItem/{username}")
+	public @ResponseBody List<SendItemListForm> getFootstepItem(@PathVariable String username){
+		User user = this.userService.findByUsername(username);
+		List<Footstep> footstepList = this.footstepService.findByUser(user);
+		List<Item> itemList = new ArrayList<Item>();
+		for(Footstep footstep : footstepList){
+			Item item = footstep.getItem();
+			//SendItemListForm sendItemListForm = new SendItemListForm();
+			itemList.add(item);
+		}
+		return sort(itemList,4);
+		
+	}
+	
+	//返回用户收藏的itemList
+	@RequestMapping(value = "/getCollectItem/{username}")
+	public @ResponseBody List<SendItemListForm> getCollectItem(@PathVariable String username){
+		User user = this.userService.findByUsername(username);
+		List<Collect> collectList = this.collectService.findByUser(user);
+		List<Item> itemList = new ArrayList<Item>();
+		for(Collect collect : collectList){
+			Item item = collect.getItem();
+			//SendItemListForm sendItemListForm = new SendItemListForm();
+			itemList.add(item);
+		}
+		return sort(itemList,4);
+	}
 
 	//用户将一个item收藏
 	@RequestMapping(value = "/toCollect")

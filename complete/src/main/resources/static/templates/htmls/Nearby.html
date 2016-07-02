@@ -36,7 +36,7 @@
 	 	  		console.log(data);
 	 	     },  
 	 	    error : function() {  
-	      		alert('HistorySend Err...');  
+	      		//alert('HistorySend Err...');  
 	 	    }
 	 	});
  		
@@ -98,10 +98,13 @@
 	 	  		
 	 	  		$("#itembar").empty();
 	 	  	 for(var i=0,l=JsonGET.length;i<l;i++){  
+					if (Ratingkey == "recommend"){
 
-	 	  	 	 $("#itembar").append('<li class="list-group-item" id='+JsonGET[i]["id"]+'><a href="#/iteminfo?itemid='+JsonGET[i]["id"]+'" onclick="BEENCLICK('+JsonGET[i]["id"]+')"><span class="badge  pull-right">'+ Ratingkey+':'+JsonGET[i][Ratingkey]+'</span>'+JsonGET[i]["name"]+'</a></li>');
-	 	  	 	   for(var key in JsonGET[i])
-	 	  	 	   console.log(key+' '+JsonGET[i][key]);
+	 	  	 		 	$("#itembar").append('<li class="list-group-item" id='+JsonGET[i]["id"]+'><a href="#/iteminfo?itemid='+JsonGET[i]["id"]+'" onclick="BEENCLICK('+JsonGET[i]["id"]+')">'+JsonGET[i]["name"]+'</a></li>');
+						
+						}else{
+	 	  	 		 	$("#itembar").append('<li class="list-group-item" id='+JsonGET[i]["id"]+'><a href="#/iteminfo?itemid='+JsonGET[i]["id"]+'" onclick="BEENCLICK('+JsonGET[i]["id"]+')"><span class="badge  pull-right">'+ Ratingkey+':'+JsonGET[i][Ratingkey]+'</span>'+JsonGET[i]["name"]+'</a></li>');
+						}
 	 	  	 	   }
 	 	  		
 	 	     },  
@@ -128,8 +131,14 @@
 			console.log('\nsearch item'+name+" with key :"+ key);
 	 		if (name.indexOf(key) != -1){
 	 			console.log('\nsearch item'+name+'get');
-	 	 		$("#itembar").append('<li class="list-group-item" id='+JsonGET[i]["id"]+'><a href="#/iteminfo?itemid='+JsonGET[i]["id"]+'" onclick="BEENCLICK('+JsonGET[i]["id"]+')"><span class="badge  pull-right">'+ Ratingkey+':'+ JsonGET[i][Ratingkey]+'</span>'+JsonGET[i]["name"]+'</a></li>');
-			}
+	 			if (Ratingkey =="recommend"){
+
+	 	 			$("#itembar").append('<li class="list-group-item" id='+JsonGET[i]["id"]+'><a href="#/iteminfo?itemid='+JsonGET[i]["id"]+'" onclick="BEENCLICK('+JsonGET[i]["id"]+')">'+JsonGET[i]["name"]+'</a></li>');
+	 			
+	 			}else{
+	 	 			$("#itembar").append('<li class="list-group-item" id='+JsonGET[i]["id"]+'><a href="#/iteminfo?itemid='+JsonGET[i]["id"]+'" onclick="BEENCLICK('+JsonGET[i]["id"]+')"><span class="badge  pull-right">'+ Ratingkey+':'+ JsonGET[i][Ratingkey]+'</span>'+JsonGET[i]["name"]+'</a></li>');
+	 			}
+	 		}
 	 	}
 		
 	}

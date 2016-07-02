@@ -70,6 +70,7 @@ public class CommentController {
 			commentForm.setScore(comment.getRatingValue());
 			commentForm.setText(comment.getText());
 			commentForm.setUsername(comment.getUser().getUsername());
+		
 			commentFormList.add(commentForm);
 		}
 		return commentFormList;

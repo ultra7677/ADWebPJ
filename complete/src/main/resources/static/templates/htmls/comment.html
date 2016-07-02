@@ -12,21 +12,56 @@ down=false;
 var x,y,imgID;
 var str="";
 
+var SEND = JSON.stringify({"itemId": nowItem});   
+
+
+console.log("there itemid is :"+nowItem);
+
+
+$.ajax({
+		type:"POST",
+		contentType : 'application/json',
+		url:"/getItemById/"+nowItem,
+		dataType:"json",
+		data:SEND,
+	    success : function(data) {  
+	  		console.log(data);
+	  		GET=data;
+	  		
+	  		$("#itemname a").html(GET["name"]);
+	  		
+	     },  
+	    error : function() {  
+  		
+	    }
+	});
+
+
+
+
 receiveTags();
+
+
+
+
 $("#pointdiv button").click(function(){
-	
-	//alert($(this).html());
+	var curbutton = $(this);
+	var type = $(this).parent().index();
 	$("#pointdiv").append("<div class='dragpoint text-center pointtype"+kind+"' style='position:absolute;top:"+($("#commentmap").position().top)+"px;left:"+($("#commentmap").position().left)+"px;border-radius: 50px;height:33px;width:33px;background-color:"+$(this).css('background-color')+";'><div style='color:white;line-height:35px'>"+$(this).html().substr(0,2)+"</div></div>");
 	$(".dragpoint").draggable({
-		stop: function(){
-			
+		stop: function(){	
 			var top = $(this).position().top-$("#commentmap").position().top+16;
 			var left = $(this).position().left-$("#commentmap").position().left+16;
 			//上传
 			if(top>0&&top<$("#commentmap").height()&&left>0&&left<$("#commentmap").width()){
-				sendTag("hehe",1,kind,left,top);
+				if (curbutton.attr("id")=="addwordtag"){
+					sendTag($("#facilityinput").val(),4,kind,left,top);
+					$("#pointdiv").append("<div class='text-center pointtype"+kind+"' style='position:absolute;top:"+($(this).position().top+6)+"px;left:"+($(this).position().left+6)+"px;border-radius: 50px;height:20px;width:20px;background-color:"+$(this).css('background-color')+";opacity:0.8;'><div style='color:black;line-height:35px'>"+$("#facilityinput").val()+"</div></div>");
+				}else{
+					sendTag("",type,kind,left,top);
+					$("#pointdiv").append("<div class='text-center pointtype"+kind+"' style='position:absolute;top:"+($(this).position().top+6)+"px;left:"+($(this).position().left+6)+"px;border-radius: 50px;height:20px;width:20px;background-color:"+$(this).css('background-color')+";opacity:0.8;'><div style='color:white;line-height:35px'></div></div>");
 
-				$("#pointdiv").append("<div class='text-center pointtype"+kind+"' style='position:absolute;top:"+($(this).position().top+6)+"px;left:"+($(this).position().left+6)+"px;border-radius: 50px;height:20px;width:20px;background-color:"+$(this).css('background-color')+";opacity:0.5;'><div style='color:white;line-height:35px'></div></div>");
+				}
 			}else{
 				
 			}
@@ -129,60 +164,20 @@ function receiveTags() {
 
 function setTags(tags){
 	for (var i=0;i<tags.length;i++){
-		$("#pointdiv").append("<div class='text-center pointtype"+tags[i]["kind"]+"' style='position:absolute;top:"+($("#pointdiv ul:eq("+kind+") li:eq("+1+")").position().top+6+tags[i]["top"])+"px;left:"+($("#pointdiv").position().left+6+tags[i]["left"])+"px;border-radius: 50px;height:20px;width:20px;background-color:"+$(this).css('background-color')+";opacity:0.5;'><div style='color:white;line-height:35px'></div></div>");
+		$("#pointdiv").append("<div class='text-center pointtype"+tags[i]["kind"]+"' style='position:absolute;top:"+($("#commentmap").position().top-6+tags[i]["top"])+"px;left:"+($("#commentmap").position().left-6+tags[i]["left"])+"px;border-radius: 50px;height:20px;width:20px;background-color:"+$("#pointdiv ul:eq(0) li:eq("+tags[i]["type"]+") button").css('background-color')+";opacity:0.8;'><div style='color:black;line-height:35px' class='text-center'>"+tags[i]["tag"]+" "+tags[i]["type"]+"</div></div>");
 	}
+	$(".pointtype1").show();
+	$(".pointtype2").hide();
+	$(".pointtype3").hide();
 }
 
-var iconList={};
-function dragImage(obj){
-	console.log(iconList[obj.id]);
-if (iconList[obj.id]!=1)
-{
-iconList[obj.id]=1;
-imgID = obj;
-str="";
-x = event.x - parseInt(imgID.style.left);
-y = event.y - parseInt(imgID.style.top);
-down=true;
-}
-}
-function dragImage2(obj){
-	console.log(iconList[obj.id]);
-	if (iconList[obj.id]!=1)
-	{
-		
-	imgID = obj;
-    str=document.getElementById("inputText").value;
-	x = event.x - parseInt(imgID.style.left);
-	y = event.y - parseInt(imgID.style.top);
-	if (str.length>0)
-	{down=true;iconList[obj.id]=1;}
-	//obj.append('<img  class="dragImg" src="imgs/icon1.png"  style="position:absolute;left:0px;top:0px" onMouseDown="dragImage(this)">')
-}
-}
-function cancelDrag(){
-	if (down) {
-	down=false;
-	if (str.length!="") sendTag(imgID.id+str,"3",imgID.style.left,imgID.style.top);
-	else sendTag(imgID.id.substr(0,imgID.id.length-1),imgID.id.substr(imgID.id.length-1,1),imgID.style.left,imgID.style.top);
-	}
-}	
-
-
-//alert(imgID.style.left+" "+imgID.style.top)};
-function moveImage(){
-if(down){
-  imgID.style.left  = event.x-x ;
-  imgID.style.top   = event.y-y ;
-  event.returnValue = false;
-}
-}
-
-
-
-document.onmousemove = moveImage;
-document.onmouseup = cancelDrag;
-
+$("#facilityinput").bind('input propertychange', function() {  
+	if($(this).val()==""){
+    	$("#addwordtag").attr("disabled",true);
+    }else{
+    	$("#addwordtag").attr("disabled",false);
+    }
+}); 
 </script>
 
 <div class="panel panel-default" id="itemdiv">
@@ -296,15 +291,12 @@ document.onmouseup = cancelDrag;
 				</li>
 				<li class="text-center">
 					<ul class="list-inline">
-						<li><button type="button" class="btn btn-danger btn-block"style="width:40px;">增加:</button></li>
+						<li><button type="button" class="btn btn-danger btn-block" id="addwordtag" disabled="true" style="width:40px;">增加:</button></li>
 						<li><input type="text" style="width:60px;" id="facilityinput"></input></li>
 					</ul>
 				</li>
 			</ul>
 			</div>
-				<div id="pointdiv" class="" style="position:fixed;z-index:4;background-color:red;">
-	
-				</div>
 				<img src="/imgs/map1.png" class="img-rounded img-responsive" id="commentmap">
 			</div>
 		</div>

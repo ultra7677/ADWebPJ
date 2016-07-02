@@ -11,4 +11,6 @@ import com.adweb.app.entity.User;
 public interface FootstepRepository extends CrudRepository<Footstep,Long>{
 	List<Footstep> findByItem(Item item);
 	List<Footstep> findByUser(User user);
+	
+	Footstep findByItemAndUser(Item item,User user);
 }

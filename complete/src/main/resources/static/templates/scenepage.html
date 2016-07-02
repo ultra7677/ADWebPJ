@@ -39,16 +39,12 @@
 					</div>    
 					<div>
 					  	<ul class="nav navbar-nav pull-right">
-					      	<li class="dropdown">
-					            <a class="dropdown-toggle" data-toggle="dropdown">
+					      	<li >
+					            <a class="dropdown-toggle"  href="#/item">
 					             	  菜单 
-					               <b class="caret"></b>
+					               
 					            </a>
-					            <ul class="dropdown-menu">
-					               <li><a href="#">分离的链接</a></li>
-					               <li class="divider"></li>
-					               <li><a href="#">另一个分离的链接</a></li>
-					            </ul>
+	
 					        </li>
 					    </ul>
 	                </div>
@@ -162,6 +158,19 @@ angular.module('ngRouteExample', ['ngRoute'])
 	console.log("in Controller nowItem: "+nowItem);
 })
 
+.controller('listController',function ($scope, $location){
+	curPage = 10;
+
+})
+.controller('wantedController',function ($scope, $location){
+	curPage = 11;
+
+})
+.controller('footstepController',function ($scope, $location){
+	curPage = 12;
+
+})
+
 //edit by SONGHAOLUN -------------------------------------------------------------------------------------------------------------------------------------
 
 //edit by XUZHELUN -------------------------------------------------------------------------------------------------------------------------------------
@@ -170,6 +179,10 @@ angular.module('ngRouteExample', ['ngRoute'])
 	showTOThereMap();
 })
 //edit by XUZHELUN -------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
 
 .config(function ($routeProvider) {
     $routeProvider.
@@ -218,7 +231,22 @@ angular.module('ngRouteExample', ['ngRoute'])
         controller: 'toThereController'
     }).
   //edit by XUZHELUN -------------------------------------------------------------------------------------------------------------------------------------
-  	
+  		when('/list', {
+        //template: 'hehehe',
+        templateUrl: '/templates/htmls/list.html',
+        controller: 'listController'
+    }).
+    when('/wanted_list', {
+        //template: 'hehehe',
+        templateUrl: '/templates/htmls/wanted.html',
+        controller: 'wantedController'
+    }).
+    
+    when('/footstep_list', {
+        //template: 'hehehe',
+        templateUrl: '/templates/htmls/footstep.html',
+        controller: 'footstepController'
+    }).
   	
   	otherwise({
         redirectTo: '/home'

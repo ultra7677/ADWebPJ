@@ -1,6 +1,7 @@
-
+<html xmlns:wb="http://open.weibo.com/wb">
 <meta charset="utf-8"/>  
 <link href="http://libs.baidu.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
+<script src="http://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
 <script src="http://libs.baidu.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
 <script src="/libs/jquery-2.1.4/jquery-2.1.4.min.js"></script>
 <script> 
@@ -159,6 +160,7 @@ function logout()
   document.getElementById("loginbutton").style.visibility='';
   document.getElementById("registerbutton").style.visibility='';
   document.getElementById("logoutbutton").style.visibility='hidden';
+  document.getElementById("git").style.visibility='';
 }
 
 function changeimage(input)
@@ -242,6 +244,7 @@ function exsitence(username)
             document.getElementById("loginbutton").style.visibility='hidden';
             document.getElementById("registerbutton").style.visibility='hidden';
             document.getElementById("logoutbutton").style.visibility='';
+            document.getElementById("git").style.visibility='hidden';
         }else if(data==0){
             alert('登陆成功（新用户）');
             changename(username,data.src);
@@ -251,6 +254,7 @@ function exsitence(username)
             document.getElementById("loginbutton").style.visibility='hidden';
             document.getElementById("registerbutton").style.visibility='hidden';
             document.getElementById("logoutbutton").style.visibility='';
+            document.getElementById("git").style.visibility='hidden';
         }
     }
     });
@@ -267,8 +271,7 @@ function exsitence(username)
         <nobr>
         <input type='button' class="button btn-primary" id ='registerbutton' onclick="loginandregisterDIV()" value='注册'></input>
         <input type='button' class="button btn-primary" id='loginbutton' value='登陆' onclick='loginorback()'></input>
-          <input type='button' class="button btn-primary" id='logoutbutton' value='登出' onclick='logout()'></input>
-          
+        <input type='button' class="button btn-primary" id='logoutbutton' value='登出' onclick='logout()'></input>       
         <input id="myphoto" type="file" accept="image/*" onchange="changeimage(this)">
         <nobr>
       </div>
@@ -290,22 +293,21 @@ function exsitence(username)
 		<div class="span5 col-xs-5 well pull-right"  style="margin:20px;height:425px;">
 		<div id="login">  
         <div class="my-div" style="margin:20px">
-          <button class="longbutton btn-block btn-primary">足迹</button>
+          <a href="#/footstep_list" color="WHITE"><button class="longbutton btn-block btn-primary">足迹</button></a>
         </div>
         <div class="my-div" style="margin:20px">
-          <button class="longbutton btn-block btn-primary">心愿单</button>
+         <a href="#/wanted_list" color="WHITE"> <button class="longbutton btn-block btn-primary">心愿单</button></a>
         </div>
         <div class="my-div" style="margin:20px">
-          <button class="longbutton btn-block btn-primary">收藏</button>
-        </div>
-        <div class="my-div" style="margin:20px">
-          <button class="longbutton btn-block btn-primary">分享</button>
+         <a href="#/list" color="WHITE"> <button class="longbutton btn-block btn-primary"  >收藏</button></a>
         </div>
         <div class="my-div" style="margin:20px">
           <button class="longbutton btn-block btn-primary">关于我们</button>
         </div>
+        <wb:share-button addition="simple" type="button" default_text="我发现这个应用不错哦，快来看看吧！"></wb:share-button>
+        
       </div>
 		</div>
 	</div>
 </div>
-      
+ </html>    

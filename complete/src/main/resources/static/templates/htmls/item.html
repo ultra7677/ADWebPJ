@@ -63,15 +63,17 @@
 	 	  		
 	 	  		$("#itembar_i").empty();
 	 	  	 for(var i=0,l=JsonGET.length;i<l;i++){  
-
-	 	  	 	 $("#itembar_i").append('<li class="list-group-item" id='+JsonGET[i]["id"]+'><a href="#/iteminfo?itemid='+JsonGET[i]["id"]+'" onclick="BEENCLICK('+JsonGET[i]["id"]+')"><span class="badge pull-right">'+ iRatingkey+':'+JsonGET[i][iRatingkey]+'</span>'+JsonGET[i]["name"]+'</a></li>');
-
+					if (iRatingkey=="recommend"){
+ 	  	 	 				$("#itembar_i").append('<li class="list-group-item" id='+JsonGET[i]["id"]+'><a href="#/iteminfo?itemid='+JsonGET[i]["id"]+'" onclick="BEENCLICK('+JsonGET[i]["id"]+')">'+JsonGET[i]["name"]+'</a></li>');
+						}else{
+	 	  	 	 			$("#itembar_i").append('<li class="list-group-item" id='+JsonGET[i]["id"]+'><a href="#/iteminfo?itemid='+JsonGET[i]["id"]+'" onclick="BEENCLICK('+JsonGET[i]["id"]+')"><span class="badge pull-right">'+ iRatingkey+':'+JsonGET[i][iRatingkey]+'</span>'+JsonGET[i]["name"]+'</a></li>');
+						}
 	 	  	 	   }
 	 	  		if (inputSearch != $("#searchinput").val()){
 	 	  	 	itemShowByKey(inputSearch,iRatingkey);
 	 	  		}
 	 	     },  
-	 	    error : function() {  
+	 	    error : function() {
 	      		alert('Err...');  
 	 	    }
 	 	});
@@ -94,8 +96,13 @@
 			console.log('\nsearch item'+name+" with key :"+ key);
 	 		if (name.indexOf(key) != -1){
 	 			console.log('\nsearch item'+name+'get');
+	 			if (Ratingkey == "recommend"){
+		 	 		$("#itembar_i").append('<li class="list-group-item" id='+JsonGET[i]["id"]+'><a href="#/iteminfo?itemid='+JsonGET[i]["id"]+'" onclick="BEENCLICK('+JsonGET[i]["id"]+')">'+JsonGET[i]["name"]+'</a></li>');
+		 			
+	 			}else{
 	 	 		$("#itembar_i").append('<li class="list-group-item" id='+JsonGET[i]["id"]+'><a href="#/iteminfo?itemid='+JsonGET[i]["id"]+'" onclick="BEENCLICK('+JsonGET[i]["id"]+')"><span class="badge pull-right">'+ Ratingkey+':'+ JsonGET[i][Ratingkey]+'</span>'+JsonGET[i]["name"]+'</a></li>');
-			}
+	 			}
+	 		}
 	 	}
 	 	inputSearch = key;
 		

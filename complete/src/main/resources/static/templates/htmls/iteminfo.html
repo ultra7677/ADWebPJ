@@ -40,12 +40,26 @@ function showComment(itemid_C){
 							'<li class="list-group-item" ><span class="badge  pull-right"> 评论者:'+ CommentList[i]["username"]  +'</span>'+CommentList[i]["text"]+'<video id="commentimg" src="/getImageByName/'+ ISN[0]+'/'+ISN[1] +'" controls="controls"></li>'		
 							);
 					}
+					
+					else if (ISN[1]=="js"){
+						$("#showCommentBar").
+						append('<div><iframe src="/3d"></iframe></div>');
+					}
+					
+					
+					
+					
 					else{
 						$("#showCommentBar").
 						append( 
 							'<li class="list-group-item" ><span class="badge  pull-right"> 评论者:'+ CommentList[i]["username"]  +'</span>'+CommentList[i]["text"]+'<img id="commentimg" src="/getImageByName/'+ ISN[0]+'/'+ISN[1] +'" class="img-rounded img-responsive"></li>'		
 							);
 					}
+				}else{
+					$("#showCommentBar").
+					append( 
+						'<li class="list-group-item" ><span class="badge  pull-right"> 评论者:'+ CommentList[i]["username"]  +'</span>'+CommentList[i]["text"]+'</li>'		
+						);
 				}
 			
 			}
@@ -95,6 +109,8 @@ function showComment(itemid_C){
  	var username=window.sessionStorage.username;
 	var JSEND = JSON.stringify({"itemId": nowItem,"username" : username}); 
 	$("#toCollect").click(function(){
+		console.log("发送收藏请求");
+		console.log(JSEND);
 	 	$.ajax({
 	 		type:"POST",
 	 		contentType : 'application/json',
@@ -105,7 +121,7 @@ function showComment(itemid_C){
 	 	  		alert("收藏成功！");
 	 	     },  
 	 	    error : function() {  
-	      		alert('Err...');  
+	      		//alert('Err...');  
 	 	    }
 	 	});
 	});
@@ -120,7 +136,7 @@ function showComment(itemid_C){
 	 	    	alert("分享成功！");
 	 	     },  
 	 	    error : function() {  
-	      		alert('Err...');  
+	      		//alert('Err...');  
 	 	    }
 	 	});
 	});
@@ -135,7 +151,7 @@ function showComment(itemid_C){
 	 	    	alert("成功加入足迹！");
 	 	     },  
 	 	    error : function() {  
-	      		alert('Err...');  
+	      		//alert('Err...');  
 	 	    }
 	 	});
 	});
@@ -150,7 +166,7 @@ function showComment(itemid_C){
 	 	    	alert("加入心愿成功！");
 	 	     },  
 	 	    error : function() {  
-	      		alert('Err...');  
+	      		//alert('Err...');  
 	 	    }
 	 	});
 	});
@@ -259,7 +275,7 @@ function changeimage(input){
 						 <button type="button" class="close" data-dismiss="alert">×</button>
 						<h4>
 							提示!
-						</h4>  您可以上传图片文件或者ogg视频文件～
+						</h4>  您可以上传图片文件或者ogg视频文件或者js的3D模型～
 					</div>
 				   </div>
 				   <button type="submit" class="btn btn-default" id="toComment">提交</button>
@@ -316,16 +332,16 @@ function changeimage(input){
 		<div class="span2 col-xs-2 well pull-right" style="line-height:13px;padding:19px 5px;width:130px;left:20px;margin-right:20px">
 			<ul class="nav nav-stacked nav-pills">
 				<li>
-					<a href="#" id="toCollect">收藏</a>
+					<a ><button  id="toCollect">收藏</button></a>
 				</li>
 				<li>
-					<a href="#" id="toShare">分享</a>
+					<a  ><button id="toShare">分享</button></a>
 				</li>
 				<li>
-					<a href="#" id="toStep">加入足迹</a>
+					<a href="#/comment" ><button id="toStep">加入足迹</button></a>
 				</li>
 				<li>
-					<a href="#" id="toWanted">加入心愿单</a>
+					<a href="#/comment" ><button id="toWanted">加入心愿单</button></a>
 				</li>
 			</ul>
 		</div>

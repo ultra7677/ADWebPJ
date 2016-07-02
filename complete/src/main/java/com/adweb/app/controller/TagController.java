@@ -48,7 +48,7 @@ public class TagController {
 		for(Tag tag : tagList){
 			TagForm tagForm = new TagForm();
 			tagForm.setItemid(tag.getId());
-			tagForm.setKind(tagForm.getKind());
+			tagForm.setKind(tag.getKind());
 			tagForm.setLeft(tag.getLeft());
 			tagForm.setTop(tag.getTop());
 			tagForm.setType(tag.getType());
