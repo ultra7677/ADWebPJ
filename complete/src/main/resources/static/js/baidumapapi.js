@@ -4,7 +4,7 @@ var centerPoint;
 var locationList;
 var overLay;
 var overLayList;
-
+var clickMakerIndex;
 function addPoint(point,index){   
 	var url="../imgs/marker_"+index+".png";
 	//alert(url);
@@ -14,7 +14,8 @@ function addPoint(point,index){
 		    });
 	var marker = new BMap.Marker(point, {icon: myIcon});    
 	//marker.enableDragging(); 
-  
+	if (index!="root")
+	marker.addEventListener("click", showFloatBox); 
 	return marker;
 }
 
@@ -32,6 +33,9 @@ function setLocation(list,index)
 	      tmPoint["x"]=list[i].x;
 	      tmPoint["y"]=list[i].y;
 	      tmPoint["index"]=index;
+	      tmPoint["id"]=list[i].id;
+	      tmPoint["name"]=list[i].name;
+	      tmPoint["footstep"]=list[i].footstep;
 	      tmPoint["i"]=i;
 	      pointList.push(tmPoint);
 	      //map.addOverlay(addPoint(point,index));
@@ -134,7 +138,10 @@ function getLocations(){
 	 			 for(var i=0,l=JsonGET.length;i<l;i++){  
 	 			 	   var tmp={};
 	 			 	   tmp["x"]=JsonGET[i]["latitude"];
-	 			 	   tmp["y"]=JsonGET[i]["longitude"];	 			 
+	 			 	   tmp["y"]=JsonGET[i]["longitude"];	 			
+	 			 	   tmp["name"]=JsonGET[i]["name"];
+	 			 	   tmp["id"]=JsonGET[i]["id"];
+	 			 	   tmp["footstep"]=JsonGET[i]["footstep"];
 	 			 	   itemList.push(tmp); 			 	   
 	 			 	 }
 	 			locationList.push(itemList);
@@ -208,9 +215,9 @@ function nearTheWay(i,point1,point2,mainDis)
 	 var midPoint=new BMap.Point(halfx,halfy);
 	 var myGeo = new BMap.Geocoder();
 	 var thePoint=new BMap.Point(pointList[i]["x"] ,pointList[i]["y"]);
-	// console.log(pointList[i]["x"]+" "+pointList[i]["y"]);
+	 console.log(pointList[i]["x"]+" "+pointList[i]["y"]);
 	 var dis=map.getDistance(midPoint, thePoint);
-	// console.log(i+" "+dis);
+	 console.log(i+" "+dis);
 	 if (dis<mainDis) return true;
 	 else return false;
 }
@@ -240,3 +247,48 @@ function checkboxOnclick(checkbox){
 	 };
 
 window.onload = loadScript;  
+
+function showFloatBox(e) {
+	var p = e.target.getPosition();
+	//console.log(p.lat + ',' + p.lng);
+	for (var i=0; i<pointList.length; i++)
+	{
+	//alert(pointList[i]["x"]+" "+pointList[i]["y"]);
+	var tmp=(p.lat-pointList[i]["y"])*(p.lng-pointList[i]["x"]);
+      if (tmp*tmp<0.000000000001) clickMakerIndex=i; 	 
+     }
+   //alert(pointList[clickMakerIndex]["name"]);
+  var floatBox=$("#floatBox");
+  if($("#canbeDelete1").length>0){$("#canbeDelete1").remove()};
+  if($("#canbeDelete2").length>0){$("#canbeDelete2").remove()};
+  console.log(pointList[clickMakerIndex]["name"]);
+  floatBox.append('<div class="panel-heading" id="canbeDelete1"><h3 class="panel-title">'+pointList[clickMakerIndex]["name"]+'</h3></div><div class="panel-body" id="canbeDelete2"><ul class="nav nav-list list-unstyled" style="width: 300px;"><li>被访问：<span>'+pointList[clickMakerIndex]["footstep"]+'</span></li><li class="nav-header">照片</li><li><img id="itemimg1" class="img-rounded img-responsive"></li><li class="text-center"><a href="#/iteminfo" onclick="goIntoItemInfo()">详细页面</a></li></ul></div>');
+  showMapImage1(pointList[clickMakerIndex]["id"]);
+}
+  
+  function goIntoItemInfo()
+  {
+   nowItem=pointList[clickMakerIndex]["id"];
+  
+   nowLat=pointList[clickMakerIndex]["y"];
+   nowLng=pointList[clickMakerIndex]["x"];
+   $("#canbeDelete1").remove();
+   $("#canbeDelete2").remove();
+  }
+  function showMapImage1(itemid_m){
+		$("#itemimg1").attr("src","/getItemImage/"+itemid_m);
+		//alert($("#itemimg1").src);
+	}
+  function showTOThereMap(){
+	 // alert(nowItem);
+	 var tlat=0;
+	  var tlng=0;
+	  for (var i=0; i<pointList.length; i++)
+		  if (nowItem==pointList[i]["id"])
+		  { tlat=pointList[i]["y"];
+		    tlng=pointList[i]["x"];
+		  }//31      121
+	  var point1=new BMap.Point(tlng,tlat);  
+	  var driving = new BMap.DrivingRoute(map, {renderOptions:{map: map, autoViewport: true}});
+	  driving.search(centerPoint, point1);
+  }

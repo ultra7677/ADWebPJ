@@ -28,13 +28,48 @@ public class Tag {
 	private String tag;
 	
 	@Column
-	private String kind;
+	private int kind;
 	
 	@Column
-	private String left;
+	private int left;
 	
 	@Column
-	private String top;
+	private int top;
+	
+	@Column 
+	private int type;
+	
+	public int getType() {
+		return type;
+	}
+
+	public void setType(int type) {
+		this.type = type;
+	}
+
+	public int getKind() {
+		return kind;
+	}
+
+	public void setKind(int kind) {
+		this.kind = kind;
+	}
+
+	public int getLeft() {
+		return left;
+	}
+
+	public void setLeft(int left) {
+		this.left = left;
+	}
+
+	public int getTop() {
+		return top;
+	}
+
+	public void setTop(int top) {
+		this.top = top;
+	}
 
 	public long getId() {
 		return id;
@@ -60,28 +95,5 @@ public class Tag {
 		this.tag = tag;
 	}
 
-	public String getKind() {
-		return kind;
-	}
 
-	public void setKind(String kind) {
-		this.kind = kind;
-	}
-
-	public String getLeft() {
-		return left;
-	}
-
-	public void setLeft(String left) {
-		this.left = left;
-	}
-
-	public String getTop() {
-		return top;
-	}
-
-	public void setTop(String top) {
-		this.top = top;
-	}
-	
 }

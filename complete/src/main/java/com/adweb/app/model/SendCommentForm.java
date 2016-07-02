@@ -1,19 +1,24 @@
 package com.adweb.app.model;
 
-public class CommentForm {
+public class SendCommentForm {
 	private long itemid;
+	private long imageid;
+	private String username;
+	private int score;
+	private String text;
+	
 	public long getItemid() {
 		return itemid;
 	}
 	public void setItemid(long itemid) {
 		this.itemid = itemid;
 	}
-	private String username;
-	private int score;
-	private String text;
-	private String imagename;
-	
-	
+	public long getImageid() {
+		return imageid;
+	}
+	public void setImageid(long imageid) {
+		this.imageid = imageid;
+	}
 	public String getUsername() {
 		return username;
 	}
@@ -31,11 +36,5 @@ public class CommentForm {
 	}
 	public void setText(String text) {
 		this.text = text;
-	}
-	public String getImagename() {
-		return imagename;
-	}
-	public void setImagename(String imagename) {
-		this.imagename = imagename;
 	}
 }

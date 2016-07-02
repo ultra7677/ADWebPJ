@@ -1,45 +1,138 @@
 <link rel="stylesheet" href="../css/item.css"></link>
 <link rel="stylesheet" href="../css/iteminfo.css"></link>
 <link rel="stylesheet" href="../css/comment.css"></link>
-
-
+<script src="http://libs.baidu.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+<link href="http://libs.baidu.com/bootstrap/3.0.3/css/bootstrap.min.css"
+	rel="stylesheet">
+<link rel="stylesheet" href="http://apps.bdimg.com/libs/jqueryui/1.10.4/css/jquery-ui.min.css"></link>
+<script src="http://apps.bdimg.com/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>	
 <script type="text/javascript">
-var down=false;
+var kind = 1;
+down=false;
 var x,y,imgID;
 var str="";
-function sendTag(comment,kind,left,top) {
-	console.log(comment+" "+kind+" "+left+" "+top);
-	/*var JsonSEND = JSON.stringify(  {"comment":comment},
+
+receiveTags();
+$("#pointdiv button").click(function(){
+	
+	//alert($(this).html());
+	$("#pointdiv").append("<div class='dragpoint text-center pointtype"+kind+"' style='position:absolute;top:"+($("#commentmap").position().top)+"px;left:"+($("#commentmap").position().left)+"px;border-radius: 50px;height:33px;width:33px;background-color:"+$(this).css('background-color')+";'><div style='color:white;line-height:35px'>"+$(this).html().substr(0,2)+"</div></div>");
+	$(".dragpoint").draggable({
+		stop: function(){
+			
+			var top = $(this).position().top-$("#commentmap").position().top+16;
+			var left = $(this).position().left-$("#commentmap").position().left+16;
+			//上传
+			if(top>0&&top<$("#commentmap").height()&&left>0&&left<$("#commentmap").width()){
+				sendTag("hehe",1,kind,left,top);
+
+				$("#pointdiv").append("<div class='text-center pointtype"+kind+"' style='position:absolute;top:"+($(this).position().top+6)+"px;left:"+($(this).position().left+6)+"px;border-radius: 50px;height:20px;width:20px;background-color:"+$(this).css('background-color')+";opacity:0.5;'><div style='color:white;line-height:35px'></div></div>");
+			}else{
+				
+			}
+			$(this).remove();
+		}
+	});
+});
+
+$("#lis2").hide();
+$("#lis3").hide();
+$("#switch1").click(function() {
+	$("#lis1").show();
+	$("#lis2").hide();
+	$("#lis3").hide();
+	kind = 1;
+	$(".pointtype1").show();
+	$(".pointtype2").hide();
+	$(".pointtype3").hide();
+});
+$("#switch2").click(function() {
+	$("#lis2").show();
+	$("#lis1").hide();
+	$("#lis3").hide();
+	kind = 2;
+	$(".pointtype1").hide();
+	$(".pointtype2").show();
+	$(".pointtype3").hide();
+});
+$("#switch3").click(function() {
+	$("#lis3").show();
+	$("#lis1").hide();
+	$("#lis2").hide();
+	kind = 3;
+	$(".pointtype1").hide();
+	$(".pointtype2").hide();
+	$(".pointtype3").show();
+});
+
+function sendTag(tag,type,kind,left,top) {
+	console.log(tag+" "+type+" "+kind+" "+left+" "+top);
+	
+	 var data = {};
+	 data["tag"] = tag;
+	 data["type"] = type;
+	 data["kind"] = kind;
+	 data["left"] = left;
+	 data["top"] = top;
+	 data["itemid"] = nowItem;
+	 
+	/*var JsonSEND = JSON.stringify(  {"tag":tag},
+									{"type":type},
 	                                {"kind":kind},
 	                                {"left":left},
 	                                {"top":top},
-	                                {"itemName":itemName}
-	                               );  
+	                                {"itemid":nowItem}
+	                               );  */
  	$.ajax({
  		type:"POST",
  		contentType : 'application/json',
  		url:"sendTag",
  		dataType:"json",
+ 		data:JSON.stringify(data),
+ 	    success : function(data) {  
+ 	  		console.log("succeed");
+ 	  	},  
+ 	    error : function() {  
+      		alert('Err...');  
+ 	    }
+ 	});
+}
+
+function receiveTags() {
+	var JsonSEND = JSON.stringify({}); 
+ 	$.ajax({
+ 		type:"POST",
+ 		contentType : 'application/json',
+ 		url:"receiveTags/"+nowItem,
+ 		dataType:"json",
  		data:JsonSEND,
  	    success : function(data) {  
  	  		console.log(data);
- 	  		JsonGET=data;
- 		   var itemList=new Array();
+ 	  		var JsonGET=data;
+ 		   /*var itemList=new Array();
  			 for(var i=0,l=JsonGET.length;i<l;i++){  
  			 	   var tmp={};
- 			 	   tmp["x"]=JsonGET[i]["latitude"];
- 			 	   tmp["y"]=JsonGET[i]["longitude"];	 			 
+ 			 	   tmp["comment"]=JsonGET[i]["comment"];
+ 			 	   tmp["type"]=JsonGET[i]["type"];	
+ 			 	   tmp["kind"]=JsonGET[i]["kind"];
+ 			 	   tmp["left"]=JsonGET[i]["left"];	
+ 			 	   tmp["top"]=JsonGET[i]["top"];	
  			 	   itemList.push(tmp); 			 	   
- 			 	 }
- 			locationList.push(itemList);
- 			var index=locationList.length-1;
- 			setLocation(locationList[index],index);
+ 			 	 }*/
+ 			setTags(JsonGET);
  	     },  
  	    error : function() {  
       		alert('Err...');  
  	    }
- 	});*/
+ 	});
 }
+
+function setTags(tags){
+	for (var i=0;i<tags.length;i++){
+		$("#pointdiv").append("<div class='text-center pointtype"+tags[i]["kind"]+"' style='position:absolute;top:"+($("#pointdiv ul:eq("+kind+") li:eq("+1+")").position().top+6+tags[i]["top"])+"px;left:"+($("#pointdiv").position().left+6+tags[i]["left"])+"px;border-radius: 50px;height:20px;width:20px;background-color:"+$(this).css('background-color')+";opacity:0.5;'><div style='color:white;line-height:35px'></div></div>");
+	}
+}
+
 var iconList={};
 function dragImage(obj){
 	console.log(iconList[obj.id]);
@@ -144,124 +237,75 @@ document.onmouseup = cancelDrag;
 		</div>
 	</nav>
 	
+	<div class="alert alert-info" style="margin-top:10px">
+			<h4>
+				提示
+			</h4>点击下方的按钮生成锚点，将锚点拖动到地图上，拖动锚点到地图外以删除当前锚点。
+	</div>
 
 	<div class="container-fluid" style="margin-bottom: 50px">
 		<div class="row-fluid well">
 			<div class="span12">
-			<div style="margin-bottom:15px">
+			<div style="margin-bottom:15px" id="pointdiv">
 			<ul class="list-unstyled list-inline lis" id="lis1">
-				<li class="text-center well" style="height:50px;">
-				   <div id="运动1"  style="position:absolute;left:140px;top:144px;"
-				    onMouseDown="dragImage(this)">
-				    <img  class="dragImg" src="imgs/icon1.png" >
-					<div> 运动 </div>
-					</div>
+				<li class="text-center">
+					<button type="button" class="btn btn-primary btn-block">运动</button>
 				</li>
-				<li  class="text-center well" style="height:50px;">
-					   <div id="健身1" style="position:absolute;left:280px;top:144px"
-				    onMouseDown="dragImage(this)">
-				    <img  class="dragImg" src="imgs/icon1.png" >
-					<div> 健身 </div>
-					</div>
-				  </li>
-				<li class="text-center well" style="height:50px;">
-				   <div  id="交往1" style="position:absolute;left:420px;top:144px"
-				    onMouseDown="dragImage(this)">
-				    <img  class="dragImg" src="imgs/icon1.png" >
-					<div> 交往 </div>
-					</div>
+				<li class="text-center">
+					<button type="button" class="btn btn-success btn-block">健身</button>
 				</li>
-				<li class="text-center well" style="height:50px;">
-				   <div id="观赏1"  style="position:absolute;left:560px;top:144px"
-				    onMouseDown="dragImage(this)">
-				    <img  class="dragImg" src="imgs/icon1.png" >
-					<div> 观赏</div>
-					</div>
+				<li class="text-center">
+					<button type="button" class="btn btn-info btn-block">交往</button>
 				</li>
-				<li class="text-center well" style="height:50px;">
-				   <div id="休憩1"  style="position:absolute;left:700px;top:144px"
-				    onMouseDown="dragImage(this)">
-				    <img  class="dragImg" src="imgs/icon1.png" >
-					<div> 休憩</div>
-					</div>
+				<li class="text-center">
+					<button type="button" class="btn btn-warning btn-block">观赏</button>
+				</li>
+				<li class="text-center">
+					<button type="button" class="btn btn-danger btn-block">休憩</button>
 				</li>
 			</ul>
 			<ul class="list-unstyled list-inline lis" id="lis2">
-				<li  class="text-center well" style="height:50px;">
-				  <div id="亲近自然2" style="position:absolute;left:140px;top:144px;"
-				    onMouseDown="dragImage(this)">
-				    <img  class="dragImg" src="imgs/icon1.png" >
-					<div> 亲近自然</div>
-				 </div>
+				<li class="text-center">
+					<button type="button" class="btn btn-primary btn-block">亲近自然</button>
 				</li>
-				<li  class="text-center well" style="height:50px;">
-				  <div id="健身锻炼2" style="position:absolute;left:280px;top:144px"
-				    onMouseDown="dragImage(this)">
-				    <img  class="dragImg" src="imgs/icon1.png" >
-					<div> 健身锻炼</div>
-					</div>
+				<li class="text-center">
+					<button type="button" class="btn btn-success btn-block">锻炼健身</button>
 				</li>
-				<li  class="text-center well" style="height:50px;">
-				   <div id="聚会交友2" style="position:absolute;left:420px;top:144px"
-				    onMouseDown="dragImage(this)">
-				    <img  class="dragImg" src="imgs/icon1.png" >
-					<div> 聚会交友</div>
-					</div>
+				<li class="text-center">
+					<button type="button" class="btn btn-info btn-block">聚会交友</button>
 				</li>
-			   <li class="text-center well" style="height:50px;">
-				   <div  id="美的体验2" style="position:absolute;left:560px;top:144px"
-				    onMouseDown="dragImage(this)">
-				    <img  class="dragImg" src="imgs/icon1.png" >
-					<div> 美的体验</div>
-					</div>
+				<li class="text-center">
+					<button type="button" class="btn btn-warning btn-block">美的体验</button>
 				</li>
-				<li class="text-center well" style="height:50px;">
-				   <div id="观赏学习2"  style="position:absolute;left:700px;top:144px"
-				    onMouseDown="dragImage(this)">
-				    <img  class="dragImg" src="imgs/icon1.png" >
-					<div> 观赏学习</div>
-					</div>
+				<li class="text-center">
+					<button type="button" class="btn btn-danger btn-block">观察学习</button>
 				</li>
 			</ul>
 			<ul class="list-unstyled list-inline lis" id="lis3">
-				<li  class="text-center well" style="height:50px;">
-				   <div id="增加硬件空间3" style="position:absolute;left:140px;top:144px"
-				    onMouseDown="dragImage(this)">
-				    <img  class="dragImg" src="imgs/icon1.png" >
-					<div> 增加硬件空间</div>
-					</div>
+			<li class="text-center">
+					<button type="button" class="btn btn-primary btn-block">增加硬件空间</button>
 				</li>
-				<li  class="text-center well" style="height:50px;">
-				   <div id="增加绿色空间 3" style="position:absolute;left:280px;top:144px"
-				    onMouseDown="dragImage(this)">
-				    <img  class="dragImg" src="imgs/icon1.png" >
-					<div> 增加绿色空间</div>
-					</div>
+				<li class="text-center">
+					<button type="button" class="btn btn-success btn-block">增加绿色空间</button>
 				</li>
-				<li class="text-center well" style="height:50px;">
-				  <div id="增加设施" style="position:absolute;left:420px;top:144px"
-				    onMouseDown="dragImage2(this)">
-					<img  class="dragImg" src="imgs/icon1.png">
-					<div>增加设施 <input id="inputText" type="text" style="width:40px;"></input></div>
-				  </div>
+				<li class="text-center">
+					<button type="button" class="btn btn-info btn-block">改善步行系统</button>
 				</li>
-				<li class="text-center well" style="height:50px;">
-				   <div id="改善公共交通3" style="position:absolute;left:560px;top:144px"
-				    onMouseDown="dragImage(this)">
-				    <img  class="dragImg" src="imgs/icon1.png" >
-					<div> 改善公共交通</div>
-					</div>
+				<li class="text-center">
+					<button type="button" class="btn btn-warning btn-block">改善公共交通</button>
 				</li>
-				<li class="text-center well" style="height:50px;">
-				   <div id="改善步行系统3" style="position:absolute;left:700px;top:144px"
-				    onMouseDown="dragImage(this)">
-				    <img  class="dragImg" src="imgs/icon1.png" >
-					<div> 改善步行系统</div>
-					</div>
+				<li class="text-center">
+					<ul class="list-inline">
+						<li><button type="button" class="btn btn-danger btn-block"style="width:40px;">增加:</button></li>
+						<li><input type="text" style="width:60px;" id="facilityinput"></input></li>
+					</ul>
 				</li>
 			</ul>
 			</div>
-				<img src="/imgs/和平公园.png" class="img-rounded img-responsive">
+				<div id="pointdiv" class="" style="position:fixed;z-index:4;background-color:red;">
+	
+				</div>
+				<img src="/imgs/map1.png" class="img-rounded img-responsive" id="commentmap">
 			</div>
 		</div>
 	</div>

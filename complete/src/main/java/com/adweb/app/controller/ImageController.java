@@ -45,6 +45,7 @@ public class ImageController {
 	
 	private static String fileUrl = "/Users/ultra/Documents/images";
 	
+	//放入item图片库
 	@RequestMapping(value = "/addImageToItem")
 	public @ResponseBody void addImageToItem(@RequestBody ImageToItemForm imageToItemForm) throws FileNotFoundException, IOException{
 		String filename = imageToItemForm.getImagename();
@@ -68,6 +69,7 @@ public class ImageController {
 		}
 	}
 	
+	//返回item图片库内的图片
 	@RequestMapping(value="getAllItemImage/{itemid}")
 	public @ResponseBody List<ImageBaseForm> getAllItemImageById(@PathVariable long itemid){
 		Item item = this.itemService.findById(itemid);
@@ -82,9 +84,12 @@ public class ImageController {
 		return imageBaseList;
 	}
 	
-	@RequestMapping(value="getImageByName/{filename}")
-	public @ResponseBody void getImageByName(@PathVariable String filename,HttpServletResponse response)throws IOException{
-		String fileUrl = this.imageService.findByFilename(filename).getFilelocation();
+	//根据图片库内filename返回图片
+	@RequestMapping(value="getImageByName/{filename}/{type}")
+	public @ResponseBody void getImageByName(@PathVariable String filename,@PathVariable String type,HttpServletResponse response)throws IOException{
+		System.out.println(filename+"."+type);
+		
+		String fileUrl = this.imageService.findByFilename(filename+"."+type).getFilelocation();
 		if (fileUrl != null){
 			FileInputStream file = new FileInputStream(fileUrl);
 			  int i=file.available(); //得到文件大小   
@@ -98,7 +103,7 @@ public class ImageController {
 		       file.close();   
 		} 
 	}
-	
+	//根据itemId返回item的属性图片
 	@RequestMapping(value="/getItemImage/{itemId}")
 	public @ResponseBody void getImage(@PathVariable long itemId,HttpServletResponse response) throws IOException{
 		Item item = this.itemService.findById(itemId);

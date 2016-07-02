@@ -67,7 +67,9 @@
 	 	  	 	 $("#itembar_i").append('<li class="list-group-item" id='+JsonGET[i]["id"]+'><a href="#/iteminfo?itemid='+JsonGET[i]["id"]+'" onclick="BEENCLICK('+JsonGET[i]["id"]+')"><span class="badge pull-right">'+ iRatingkey+':'+JsonGET[i][iRatingkey]+'</span>'+JsonGET[i]["name"]+'</a></li>');
 
 	 	  	 	   }
-	 	  		
+	 	  		if (inputSearch != $("#searchinput").val()){
+	 	  	 	itemShowByKey(inputSearch,iRatingkey);
+	 	  		}
 	 	     },  
 	 	    error : function() {  
 	      		alert('Err...');  
@@ -95,13 +97,12 @@
 	 	 		$("#itembar_i").append('<li class="list-group-item" id='+JsonGET[i]["id"]+'><a href="#/iteminfo?itemid='+JsonGET[i]["id"]+'" onclick="BEENCLICK('+JsonGET[i]["id"]+')"><span class="badge pull-right">'+ Ratingkey+':'+ JsonGET[i][Ratingkey]+'</span>'+JsonGET[i]["name"]+'</a></li>');
 			}
 	 	}
+	 	inputSearch = key;
 		
 	}
 
 
 
-
-$(document).ready(function(){
 
 
 	
@@ -112,6 +113,7 @@ $(document).ready(function(){
 
 
 	$('#searchinput').bind('input propertychange', function() {  
+		inputSearch=$("#searchinput").val()
     itemShowByKey($("#searchinput").val(),RatingKey);
 }); 
 
@@ -146,7 +148,6 @@ $(document).ready(function(){
 	  }); 
 	  
 	  
-	});
 
 </script>
 

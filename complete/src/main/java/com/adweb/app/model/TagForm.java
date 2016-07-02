@@ -2,38 +2,52 @@ package com.adweb.app.model;
 
 public class TagForm {
 	private String tag;
-	private String kind;
-	private String left;
-	private String top;
-	private String itemName;
+	private int kind;
+	private int left;
+	private int top;
+	private int type;
+	
+	private long itemid;
+	
+	public long getItemid() {
+		return itemid;
+	}
+	public void setItemid(long itemid) {
+		this.itemid = itemid;
+	}
+	
 	public String getTag() {
 		return tag;
 	}
 	public void setTag(String tag) {
 		this.tag = tag;
 	}
-	public String getKind() {
+	public int getKind() {
 		return kind;
 	}
-	public void setKind(String kind) {
+	public void setKind(int kind) {
 		this.kind = kind;
 	}
-	public String getLeft() {
+	public int getLeft() {
 		return left;
 	}
-	public void setLeft(String left) {
+	public void setLeft(int left) {
 		this.left = left;
 	}
-	public String getTop() {
+	public int getTop() {
 		return top;
 	}
-	public void setTop(String top) {
+	public void setTop(int top) {
 		this.top = top;
 	}
-	public String getItemName() {
-		return itemName;
+
+	public int getType() {
+		return type;
 	}
-	public void setItemName(String itemName) {
-		this.itemName = itemName;
+	public void setType(int type) {
+		this.type = type;
 	}
+	
+	
+
 }

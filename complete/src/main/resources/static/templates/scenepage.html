@@ -31,12 +31,12 @@
 					 <a class="navbar-brand" href="#">随评</a>
 				</div>
 				<div>
-					<form class="navbar-form navbar-left" role="search">
+					<div class="navbar-form navbar-left" role="search">
 						<div class="form-group">
-						  	<input type="text" class="form-control search-query" placeholder="Search">
+						  	<input type="text" class="form-control search-query" placeholder="Search" id="MainSearchInput">
 						</div>
-						<button type="submit" class="btn btn-default">搜索</button>
-					</form>    
+						<button type="submit" class="btn btn-default" ><a href="#/item" onclick="MainSearch()">搜索</a></button>
+					</div>    
 					<div>
 					  	<ul class="nav navbar-nav pull-right">
 					      	<li class="dropdown">
@@ -68,6 +68,8 @@
 					id="floatBox">
 					<!--  <div class="panel-heading" id="canbeDelete1">
 						<h3 class="panel-title">景点名称</h3>
+						<li class="pull-right switch"><a href="#/home" id="backtomap"></a>
+						</li>
 					</div>
 					<div class="panel-body"  id="canbeDelete2">
 						<ul class="nav nav-list list-unstyled" style="width: 300px;">
@@ -88,7 +90,7 @@
 					id="anmul">
 					<ul class="nav nav-pills">
 						<li class="pull-left"><a id="hidebottomnav">隐藏</a></li>
-						<li class="switch"><a href="#/item">项目列表</a></li>
+						<li class="switch"><a href="#/item" onclick="SearchEmpty()">项目列表</a></li>
 						<li class="switch"><a href="#/nearby">附近</a></li>
 						<li class="switch"><a href="#/searchhistory">搜索历史</a></li>
 						<li class="switch"><a href="#/routing">路线规划</a></li>
@@ -112,6 +114,8 @@
 var curPage = 0; 
 var pageOn = 0;
 var bottomNavOn = true;
+var inputSearch = "";
+
 //edit by SONGHAOLUN -------------------------------------------------------------------------------------------------------------------------------------
 var nowItem = 0;
 //edit by SONGHAOLUN -------------------------------------------------------------------------------------------------------------------------------------
@@ -159,6 +163,14 @@ angular.module('ngRouteExample', ['ngRoute'])
 })
 
 //edit by SONGHAOLUN -------------------------------------------------------------------------------------------------------------------------------------
+
+//edit by XUZHELUN -------------------------------------------------------------------------------------------------------------------------------------
+.controller('toThereController',function ($scope, $location){
+	curPage = 8;
+	showTOThereMap();
+})
+//edit by XUZHELUN -------------------------------------------------------------------------------------------------------------------------------------
+
 .config(function ($routeProvider) {
     $routeProvider.
     when('/home', {
@@ -199,12 +211,41 @@ angular.module('ngRouteExample', ['ngRoute'])
         controller: 'ItemInfoController'
     }).
   	//edit by SONGHAOLUN -------------------------------------------------------------------------------------------------------------------------------------
-    otherwise({
+     	//edit by XUZHELUN -------------------------------------------------------------------------------------------------------------------------------------
+  	 when('/toThere', {
+        //template: 'hehehe',
+        template: 'hehehe',
+        controller: 'toThereController'
+    }).
+  //edit by XUZHELUN -------------------------------------------------------------------------------------------------------------------------------------
+  	
+  	
+  	otherwise({
         redirectTo: '/home'
     });
 });
 
+
+function MainSearch(){
+	inputSearch=$("#MainSearchInput").val();
+	console.log("Search to item.html by key : "+inputSearch);
+}
+function SearchEmpty(){
+	inputSearch="";
+	console.log("Goto item with no search key");
+}
+
+
 $(document).ready(function(){
+	
+	
+	function MainSearch(){
+		inputSearch=$("#MainSearchInput").val();
+		
+		
+	}
+	
+	
 	  $("#backtomap").click(function(){
 	    $("#contentpanal").fadeOut();
 	    pageOn = 0;

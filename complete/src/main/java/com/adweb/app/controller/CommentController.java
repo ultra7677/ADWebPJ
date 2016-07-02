@@ -1,7 +1,11 @@
 package com.adweb.app.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -52,4 +56,23 @@ public class CommentController {
 		
 		this.commentService.create(comment);
 	}
+	
+	//获取对于一个item的所有评价
+	@RequestMapping(value = "/getCommentListByItem/{itemid}")
+	public @ResponseBody List<CommentForm> getCommentListById(@PathVariable long itemid){
+		Item item = this.itemService.findById(itemid);
+		List<Comment> commentList = this.commentService.findByItem(item);
+		List<CommentForm> commentFormList = new ArrayList<CommentForm>();
+		for(Comment comment : commentList){
+			CommentForm commentForm = new CommentForm();
+			commentForm.setImagename(comment.getImagename());
+			commentForm.setItemid(comment.getItem().getId());
+			commentForm.setScore(comment.getRatingValue());
+			commentForm.setText(comment.getText());
+			commentForm.setUsername(comment.getUser().getUsername());
+			commentFormList.add(commentForm);
+		}
+		return commentFormList;
+	}
+	
 }

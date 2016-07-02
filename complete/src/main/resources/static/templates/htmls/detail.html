@@ -7,6 +7,92 @@
 <div class="panel panel-default" id = "itemdiv">
 <script>
 
+function showMapImage(itemid_m){
+	$("#itemimg").attr("src","/getItemImage/"+itemid_m);
+}
+
+
+function showComment(itemid_C){
+	var CommentList={};
+ 	var dataSEND = {};
+	$.ajax({
+ 		type:"POST",
+ 		contentType : 'application/json',
+ 		url:"/getCommentListByItem/"+itemid_C,
+ 		dataType:"json",
+ 		data: dataSEND,
+ 	    success : function(data) {  
+ 	  		console.log(data);
+			CommentList=data;
+			
+			for (var i=0;i<CommentList.length;i++){
+				if (CommentList[i]["imagename"]){
+					var ISN= CommentList[i]["imagename"].split('.');
+					if (ISN[1]=="ogg"){
+						$("#showCommentBar").
+						append( 
+							'<li class="list-group-item" ><span class="badge  pull-right"> 评论者:'+ CommentList[i]["username"]  +'</span>'+CommentList[i]["text"]+'<video id="commentimg" src="/getImageByName/'+ ISN[0]+'/'+ISN[1] +'" controls="controls"></li>'		
+							);
+					}
+					else{
+						$("#showCommentBar").
+						append( 
+							'<li class="list-group-item" ><span class="badge  pull-right"> 评论者:'+ CommentList[i]["username"]  +'</span>'+CommentList[i]["text"]+'<img id="commentimg" src="/getImageByName/'+ ISN[0]+'/'+ISN[1] +'" class="img-rounded img-responsive"></li>'		
+							);
+					}
+				}
+			}
+			
+			
+ 	     },  
+ 	    error : function() {  
+      		console.log("getCommentError!.....");
+ 	    }
+ 	});
+	
+
+}
+
+function showAllImage(item_AI){
+	var ImageList = {};
+	var dataSEND = {};
+	$.ajax({
+ 		type:"POST",
+ 		contentType : 'application/json',
+ 		url:"/getAllItemImage/"+item_AI,
+ 		dataType:"json",
+ 		data: dataSEND,
+ 	    success : function(data) {  
+ 	  		console.log(data);
+			ImageList=data;
+			for (i=0;i<ImageList.length;i++){
+			
+				if (ImageList[i]["imagename"]){
+					var ISN= ImageList[i]["imagename"].split('.');
+					if (ISN[1]=="ogg"){
+						$("#AllImage").
+						append( 
+							'<li class="list-group-item" ><video id="commentimg" src="/getImageByName/'+ ISN[0]+'/'+ISN[1] +'" controls="controls"> </video>视频描述：'+ImageList[i]["description"]+'</li>'		
+							);
+					}
+					else{
+						$("#AllImage").
+						append( 
+							'<li class="list-group-item" ><img id="commentimg" src="/getImageByName/'+ ISN[0]+'/'+ISN[1] +'" class="img-rounded img-responsive">图片描述：'+ImageList[i]["description"]+'</li>'		
+							);
+					}
+			}
+			
+			}
+ 	     },  
+ 	    error : function() {  
+      		console.log("getAllImageAndVidoeError!.....");
+ 	    }
+ 	});
+	
+	
+	
+}
 
 
 
@@ -34,9 +120,11 @@ console.log("there itemid is :"+nowItem);
 	  		$("#fourStar").html(GET["fourStar"]);
 	  		$("#fiveStar").html(GET["fiveStar"]);
 	  		$("#baseContent").html(GET["baseContent"]);
-
-
-	  		
+			
+	  		showMapImage(nowItem);
+	  		showComment(nowItem);
+			 
+	  		showAllImage(nowItem);
 	     },  
 	    error : function() {  
   		alert('Err...');  
@@ -118,6 +206,17 @@ $("#toWanted").click(function(){
    <div class="navbar-header" id="itemname">
       <a class="navbar-brand">许哲纶</a>
    </div>   
+   
+   		<div>
+			<ul class="nav navbar-nav pull-right">
+				<li>
+					<a href="#/iteminfo">返回上一页</a>
+				</li>
+
+			</ul>
+		</div>
+   
+   
 </nav>
 
 <div class="container-fluid" style="margin-bottom:50px">
@@ -186,35 +285,21 @@ $("#toWanted").click(function(){
 	</div>
 
 	<div class="row-fluid well">
-		<div class="span12">
+		<div class="span12" id="showCommentBar">
 			<h2>
 				他人评价
 			</h2>
-			<p>
-				本可视化布局程序在HTML5浏览器上运行更加完美, 能实现自动本地化保存, 即使关闭了网页, 下一次打开仍然能恢复上一次的操作.
-			</p>
 		</div>
 	</div>
 	
 	<div class="row-fluid well">
-		<div class="span12">
-			<h2>
-				照片
-			</h2>
-			<img src="/imgs/bg.png" class="img-rounded img-responsive">
+		<div class="span12" id="AllImage">
+			<h2>照片 & 视频</h2>
+			<img src="/imgs/bg.png" class="img-rounded img-responsive" alt="这是一个测试文件~~">
 		</div>
 	</div>
 	
-	<div class="row-fluid well">
-		<div class="span12">
-			<h2>
-				视频
-			</h2>
-			<video width="100%" height="auto" controls="controls" autoplay="autoplay">
-			  
-			</video>
-		</div>
-	</div>
+
 </div>
 <div>
 	

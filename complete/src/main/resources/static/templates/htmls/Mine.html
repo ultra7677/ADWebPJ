@@ -7,19 +7,24 @@
 flag=0;
 function loadScript()
 {
- if (window.sessionStorage.username!=null)
+ if (sessionStorage.getItem("username")!=null)
   {
-    document.getElementById("currentusername").innerHTML=window.sessionStorage.username;
-    //document.getElementById("myphoto").src = "/getImage/"+username;
+    document.getElementById("currentusername").innerHTML=sessionStorage.getItem("username");
+    document.getElementById("myphoto").src = "/getImage/"+sessionStorage.getItem("username");
     document.getElementById("loginbutton").style.visibility="hidden";
     document.getElementById("registerbutton").style.visibility="hidden";
     document.getElementById("git").style.visibility="hidden";
+    document.getElementById('logoutbutton').style.visibility="";
   }
   document.getElementById("register").style.visibility="hidden";
   document.getElementById('confirmloginbutton').style.visibility="hidden";
-  document.getElementById('logoutbutton').style.visibility="hidden";
+  document.getElementById('logoutbutton').style.visibility="";
 }
-window.onload = loadScript;
+//alert("heihei");
+alert(sessionStorage.getItem("username"));
+//loadScript();
+
+window.onload = loadScript();
 function loginandregisterDIV()
 {
     if(flag==0)
@@ -137,7 +142,8 @@ function login(username,password)
 }
 function changename(username,image)
 {
-  window.sessionStorage.username = username;
+  //window.sessionStorage.username = username;
+  sessionStorage.setItem("username",username);
   //getElementById("myphoto").src=image;
   document.getElementById("currentusername").innerHTML=username;
   document.getElementById("loginbutton").style.visibility='hidden';
@@ -146,7 +152,8 @@ function changename(username,image)
 }
 function logout()
 {
-  window.sessionStorage.username = null;
+  //window.sessionStorage.username = null;
+  sessionStorage.clear();
   document.getElementById("myphoto").src="/imgs/beforelogin.jpg";
   document.getElementById("currentusername").innerHTML="未登录";
   document.getElementById("loginbutton").style.visibility='';
@@ -187,13 +194,14 @@ function getcode()
 {
 
     if (window.location.search=='')
-	window.location.href="https://github.com/login/oauth/authorize?client_id=0f1fa28b5e41de6d3b4f&state=xxx&redirect_uri=http://localhost:8080/map/resources/static/templates/htmls/Mine.html";
+	window.location.href="https://github.com/login/oauth/authorize?client_id=0f1fa28b5e41de6d3b4f&state=xxx&redirect_uri=http://localhost:8080/#/mine";
+    
     else
     	{
         var str=window.location.search;
         var code=str.substring(6,26);
         alert(code);
-        var newurl="https://github.com/login/oauth/access_token?client_id=0f1fa28b5e41de6d3b4f&client_secret=80e773eb46bed88e61b349bc8f48539124c2261d&code="+code+"&redirect_uri=http://localhost:8080/map/resources/static/templates/htmls/Mine.html";
+        var newurl="https://github.com/login/oauth/access_token?client_id=0f1fa28b5e41de6d3b4f&client_secret=80e773eb46bed88e61b349bc8f48539124c2261d&code="+code+"&redirect_uri=http://localhost:8080/#/mine";
         alert(newurl);
         window.location.href=newurl;
     	}
@@ -214,18 +222,18 @@ function getgitID()
 	        }
 	    });
 }
-function exisitence(username)
+function exsitence(username)
 {
    var data = {};
-   data["username"] = username;
+//   data["username"] = username;
    $.ajax({
         contentType: "application/json",
-        url:'/exsitence',
+        url:'/thirdPartyLogin/'+username,
         data:JSON.stringify(data),
         type:'POST',
         cache:false, dataType:'json',
         success:function(data) {      
-            if (data.status==1){
+            if (data==1){
             alert('登录成功')
             changename(username,data.src);
             document.getElementById("myphoto").src = "/getImage/"+username;
@@ -234,7 +242,7 @@ function exisitence(username)
             document.getElementById("loginbutton").style.visibility='hidden';
             document.getElementById("registerbutton").style.visibility='hidden';
             document.getElementById("logoutbutton").style.visibility='';
-        }else if(data.status==0){
+        }else if(data==0){
             alert('登陆成功（新用户）');
             changename(username,data.src);
             document.getElementById("myphoto").src = "./beforelogin.jpg";
