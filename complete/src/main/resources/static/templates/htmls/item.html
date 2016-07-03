@@ -11,8 +11,8 @@
  	var JsonGET = JSON.parse('[{"id" : 1,"name": "迪士尼", "averageRating": 52.6,"collect" : 80,"footstep" : 258,"wanted" : 120,"recommend" : 520},{"id" : 2,"name": "外滩", "averageRating": 58.6,"collect" : 80,"footstep" : 258,"wanted" : 120,"recommend" : 520},{"id" : 3,"name": "WallStreet", "averageRating": 22.6,"collect" : 80,"footstep" : 258,"wanted" : 120,"recommend" : 520}, {"id" : 4,"name": "复旦大学", "averageRating": 99.1,"collect" : 80,"footstep" : 258,"wanted" : 120,"recommend" : 520}]');  
 	var RatingKey = 'averageRating';
  	var locationlist;
- 	var locationNow;
-
+ 	var locationNow={};
+	locationNow["name"]="all";
  	//var username="Banzhao";
  	var username=window.sessionStorage.username;
  	function BEENCLICK(itemBeenClicked){
@@ -43,12 +43,58 @@
  		
  	}
  	
+ 	
+ 	function getLocations(){
+ 		var data1 = {};
+ 		
+ 		$.ajax({
+	 		type:"GET",
+	 		contentType : 'application/json',
+	 		url:"/getLocationList",
+	 		dataType:"json",
+	 		data : JSON.stringify(data1),
+	 	    success : function(data) {  
+	 	  		console.log(data);
+	 	  		locationlist=data;
+	 	  		locationNow=data[0];
+	 	  		$("#locationButtomBar").empty();
+	 	  		
+	 	  		
+	 	  		
+	 	  		
+	 	  		
+	 	  		for(var i=0;i<data.length;i++){
+	 	  			$("#locationButtomBar").append('<button type="button" id='+data[i]["id"]+' value='+i+' class="btn btn-default">'+data[i]["name"]+'</button>');
+	 	  			var il=data[i]["id"]; 
+	 	  			$("#"+il).click( function(){
+	 	  				locationNow = locationlist[this.value]; 
+	 	  				itemShow_item(RatingKey);
+					console.log(locationNow);
+	 	  			}	);
+	 	  		}
+	 	  		
+	 	  		itemShow('averageRating');
+	 	     },  
+	 	    error : function() {  
+	      		alert('Err...');  
+	 	    },		
+	 	     done : function(e) {
+				console.log("DONE");
+			}
+	 	});
+ 		
+ 	}
+ 	
+ 	
+ 	
+ 	
 	function itemShow_item(iRatingkey){ 
-		$("#itembar_i").empty();
-		//var username ="Banzhao";
-		var username= window.sessionStorage.username;
-		var JsonSEND = JSON.stringify( {"username": username});  
-	 	
+		
+	 	if (locationNow["name"]=="all"){
+	 		$("#itembar_i").empty();
+			//var username ="Banzhao";
+			var username= window.sessionStorage.username;
+			var JsonSEND = JSON.stringify( {"username": username});  
 		console.log("POSTING /gitList/"+iRatingkey);
 		console.log(JsonSEND);
 	 	$.ajax({
@@ -78,7 +124,47 @@
 	 	    }
 	 	});
 		
+	 	}else {
+	 		
+	 		
+	 		$("#itembar_i").empty();
+			//var username="Banzhao";
+			username=window.sessionStorage.username;
+			var JsonSEND = JSON.stringify( {"username": username, "locationName": locationNow["name"]});  
+		 	
+			console.log("POSTING /gitList/"+iRatingkey);
+			console.log(JsonSEND);
+		 	$.ajax({
+		 		type:"POST",
+		 		contentType : 'application/json',
+		 		url:"/getItemList/"+iRatingkey,
+		 		dataType:"json",
+		 		data:JsonSEND,
+		 	    success : function(data) {  
+		 	  		console.log(data);
+		 	  		JsonGET=data;
+		 	  		
+		 	  		$("#itembar_i").empty();
+		 	  	 for(var i=0,l=JsonGET.length;i<l;i++){  
+						if (Ratingkey == "recommend"){
 
+		 	  	 		 	$("#itembar_i").append('<li class="list-group-item" id='+JsonGET[i]["id"]+'><a href="#/iteminfo?itemid='+JsonGET[i]["id"]+'" onclick="BEENCLICK('+JsonGET[i]["id"]+')">'+JsonGET[i]["name"]+'</a></li>');
+							
+							}else{
+		 	  	 		 	$("#itembar_i").append('<li class="list-group-item" id='+JsonGET[i]["id"]+'><a href="#/iteminfo?itemid='+JsonGET[i]["id"]+'" onclick="BEENCLICK('+JsonGET[i]["id"]+')"><span class="badge  pull-right">'+ iRatingkey+':'+JsonGET[i][Ratingkey]+'</span>'+JsonGET[i]["name"]+'</a></li>');
+							}
+		 	  	 	   }
+		 	  		
+		 	     },  
+		 	    error : function() {  
+		      		//alert('Err...');  
+		 	    }
+		 	});
+	 		
+	 		
+	 		
+	 		
+	 	}
 	
 
 	}  
@@ -110,12 +196,12 @@
 
 
 
-
-
-	
+	Ratingkey="averageRating";
+	locationNow["name"]="all";
+	locationlist = getLocations();
 	itemShow_item('averageRating');
 
-//	locationlist = getLocations();
+//locationlist = getLocations();
 
 
 
@@ -162,7 +248,12 @@
 
 <div class="panel panel-default" id = "itemdiv">
 
-
+<div class="btn-toolbar" role="toolbar"  >
+  <div class="btn-group" id="locationButtomBar">
+  <button type="button" class="btn btn-default">b</button>
+  <button type="button" class="btn btn-default">b</button>
+  <button type="button" class="btn btn-default">b</button>
+ </div>
 
 
 

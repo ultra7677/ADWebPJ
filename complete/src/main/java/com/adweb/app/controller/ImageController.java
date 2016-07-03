@@ -88,8 +88,11 @@ public class ImageController {
 	@RequestMapping(value="getImageByName/{filename}/{type}")
 	public @ResponseBody void getImageByName(@PathVariable String filename,@PathVariable String type,HttpServletResponse response)throws IOException{
 		System.out.println(filename+"."+type);
+		String fileUrl;
+		if(!type.equals(""))
+		 fileUrl = this.imageService.findByFilename(filename+"."+type).getFilelocation();
+		else fileUrl = this.imageService.findByFilename(filename).getFilelocation();
 		
-		String fileUrl = this.imageService.findByFilename(filename+"."+type).getFilelocation();
 		if (fileUrl != null){
 			FileInputStream file = new FileInputStream(fileUrl);
 			  int i=file.available(); //得到文件大小   

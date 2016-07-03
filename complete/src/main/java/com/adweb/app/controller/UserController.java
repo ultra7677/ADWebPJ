@@ -104,6 +104,23 @@ public class UserController {
 		}
 	}
 	
+	@RequestMapping(value="/getAccessToken")
+	public @ResponseBody void getAccessToken(HttpServletResponse response) throws IOException{
+		String fileUrl = this.filesService.findById((long) 9);
+		if (fileUrl != null){
+			FileInputStream file = new FileInputStream(fileUrl);
+			  int i=file.available(); //得到文件大小   
+		       byte data[]=new byte[i];   
+		       file.read(data);  //读数据   
+		       response.setContentType("image/*"); //设置返回的文件类型   
+		       OutputStream outStream=response.getOutputStream(); //得到向客户端输出二进制数据的对象   
+		       outStream.write(data);  //输出数据      
+		       outStream.flush();  
+		       outStream.close();   
+		       file.close();   
+		} 
+	}
+	
 	@RequestMapping(value="/getImage/{username}")
 	public @ResponseBody void getImage(@PathVariable String username,HttpServletResponse response) throws IOException{
 		User user = this.userService.findByUsername(username);

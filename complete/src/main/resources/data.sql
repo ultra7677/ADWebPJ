@@ -42,3 +42,5 @@ INSERT INTO FILES (id,filename,fileLocation,filetype) VALUES(5,'黄兴公园.png
 INSERT INTO FILES (id,filename,fileLocation,filetype) VALUES(6,'上海博物馆.png','/Users/ultra/Documents/images/上海博物馆.png','image');
 INSERT INTO FILES (id,filename,fileLocation,filetype) VALUES(7,'上海汽车博物馆.png','/Users/ultra/Documents/images/上海汽车博物馆.png','image');
 INSERT INTO FILES (id,filename,fileLocation,filetype) VALUES(8,'上海动画博物馆.png','/Users/ultra/Documents/images/上海动画博物馆.png','image');
+
+INSERT INTO FILES (id,filename,fileLocation,filetype) VALUES(9,'access_token','/Users/ultra/Documents/images/access_token','file');

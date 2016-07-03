@@ -14,6 +14,11 @@ var str="";
 
 var SEND = JSON.stringify({"itemId": nowItem});   
 
+showMapImage(nowItem);
+
+function showMapImage(itemid_m){
+	$("#commentmap").attr("src","/getItemImage/"+itemid_m);
+}
 
 console.log("there itemid is :"+nowItem);
 
@@ -178,6 +183,46 @@ $("#facilityinput").bind('input propertychange', function() {
     	$("#addwordtag").attr("disabled",false);
     }
 }); 
+
+$("#QuestionSubmit").click(function(){
+				var JSEND={};
+				var JSEND2={};
+				JSEND["itemid"]=nowItem;
+				JSEND2["itemid"]=nowItem;
+				var select_Q=$("#QuestionTrue").val();
+				console.log(select_Q);
+				if (select_Q=="option1"){
+					JSEND["select"]="该景点分类是否正确 is 是!";
+				}else{
+				JSEND["select"]="该景点分类是否正确 is 否!";
+				}
+			
+				
+								
+				
+				//To BE CO
+				console.log("SEND QUESTION :");
+				console.log(JSEND);
+				$.ajax({
+			 		type:"POST",
+			 		contentType : 'application/json',
+			 		url:"/addQuestion",
+			 		dataType:"json",
+			 		data:JSON.stringify(JSEND),
+			 	    success : function(data) {  
+			 	  		console.log("succeed");
+			 	  	},  
+			 	    error : function() {  
+			      		//alert('Err...');  
+			 	    }
+			 	});
+				
+			
+			}	
+		);
+
+
+
 </script>
 
 <div class="panel panel-default" id="itemdiv">
@@ -197,36 +242,21 @@ $("#facilityinput").bind('input propertychange', function() {
 					data-toggle="dropdown"> 调查问卷 <b class="caret"></b>
 				</a>
 					<div class="dropdown-menu" style="padding: 20px; width: 500px">
-						<form>
+						<div class="form-group">
 							<label for="name">请问该景点分类是否正确</label>
-							<div>
+							<div id="QuestionBar">
 								<label class="checkbox-inline"> <input type="radio"
-									name="optionsRadios" id="optionsRadios1" value="option1"
-									checked> 是
+									name="optionsRadios"  value="option1"
+									checked id="QuestionTrue"> 是
 								</label> <label class="checkbox-inline"> <input type="radio"
 									name="optionsRadios" id="optionsRadios2" value="option2"
 									checked> 否
 								</label>
 							</div>
-							<label for="name">请问您对该节点是否满意</label>
-							<div>
-								<label class="checkbox-inline"> <input type="radio"
-									name="optionsRadiosinline" id="optionsRadios1" value="option1"
-									checked> 非常满意
-								</label> <label class="checkbox-inline"> <input type="radio"
-									name="optionsRadiosinline" id="optionsRadios2" value="option2"
-									checked> 比较满意
-								</label> <label class="checkbox-inline"> <input type="radio"
-									name="optionsRadiosinline" id="optionsRadios3" value="option3">
-									不太满意
-								</label> <label class="checkbox-inline"> <input type="radio"
-									name="optionsRadiosinline" id="optionsRadios4" value="option4">
-									很不满意
-								</label>
-							</div>
-							<button type="submit" class="btn btn-default"
+							
+							<button type="submit" class="btn btn-default" id="QuestionSubmit"
 								style="margin-top: 10px">提交</button>
-						</form>
+						</div>
 					</div></li>
 			</ul>
 		</div>

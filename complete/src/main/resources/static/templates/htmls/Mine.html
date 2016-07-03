@@ -200,29 +200,56 @@ function getcode()
     
     else
     	{
-        var str=window.location.search;
+    	alert("1");
+    	var str=window.location.search;
         var code=str.substring(6,26);
-        alert(code);
         var newurl="https://github.com/login/oauth/access_token?client_id=0f1fa28b5e41de6d3b4f&client_secret=80e773eb46bed88e61b349bc8f48539124c2261d&code="+code+"&redirect_uri=http://localhost:8080/#/mine";
-        alert(newurl);
+    	
+      var data = {};
+        $.ajax( {
+	        url:newurl,
+	        data:JSON.stringify(data),
+	        type:'POST',
+	        //dataType: 'JSON',
+	        contentType: "application/javascript",
+	        success:function(data) { 
+	         
+	        }
+	    });
+        
         window.location.href=newurl;
     	}
 }
 function getgitID()
 {
-	var token=document.getElementById("token").value;
-	var url = "https://api.github.com/user?access_token="+token;
-	 $.ajax( {
-	        url:url,
-	        data:{
-	        },
-	        type:'GET',
-	        cache:false, dataType:'json',
-	        success:function(data) {
-	           console.log(data); 
-	           exsitence(data.login);
+	var data={};
+	var str1="";
+
+	  $.ajax({
+	        url:"/getAccessToken",
+	        data:JSON.stringify(data),
+	        type:'POST',
+	        dataType: 'text',
+	        //contentType: "application/javascript",
+	        success:function(data) {	           
+	           str1=data.substring(13,53);	
+	            var url = "https://api.github.com/user?access_token="+str1;
+	            $.ajax( {
+	    	        url:url,
+	    	        data:{
+	    	        },
+	    	        type:'GET',
+	    	        cache:false, dataType:'json',
+	    	        success:function(data) {
+	    	           console.log(data); 
+	    	           alert("id!");
+	    	           exsitence(data.login);
+	    	        }
+	    	    });
 	        }
 	    });
+  
+	
 }
 function exsitence(username)
 {
@@ -278,7 +305,7 @@ function exsitence(username)
       <div id='git'>
         <input type='button' value='获取第三方验证码' onclick="getcode()"></input>
         <input type='button' value='GIT登陆' onclick="getgitID()"></input>
-        <input id='token' placeholder='验证码'></input>
+        
       </div>
         <div id="register">
         <div id="newusernamediv" style="margin:10px;">

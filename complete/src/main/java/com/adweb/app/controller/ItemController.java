@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.adweb.app.entity.Collect;
+import com.adweb.app.entity.Comment;
 import com.adweb.app.entity.Footstep;
 import com.adweb.app.entity.Item;
 import com.adweb.app.entity.Location;
@@ -21,12 +22,15 @@ import com.adweb.app.entity.Share;
 import com.adweb.app.entity.User;
 import com.adweb.app.entity.Wanted;
 import com.adweb.app.model.GetItemListForm;
+import com.adweb.app.model.QuestionForm;
 import com.adweb.app.model.SendItemForm;
 import com.adweb.app.model.SendItemListForm;
 import com.adweb.app.model.ToForm;
 import com.adweb.app.model.UsernameForm;
 import com.adweb.app.recommend.KNN;
+import com.adweb.app.repository.CommentRepository;
 import com.adweb.app.service.CollectService;
+import com.adweb.app.service.CommentService;
 import com.adweb.app.service.FootstepService;
 import com.adweb.app.service.ItemService;
 import com.adweb.app.service.LocationService;
@@ -57,6 +61,8 @@ public class ItemController {
 	
 	@Autowired SearchHistoryService searchHistoryService;
 	
+	@Autowired CommentRepository commentRepository;
+	
 	//返回用户心愿单wantedList
 	@RequestMapping(value = "/getWantedItem/{username}")
 	public @ResponseBody List<SendItemListForm> getWantedItem(@PathVariable String username){
@@ -72,6 +78,18 @@ public class ItemController {
 		
 	}
 	
+	@RequestMapping(value = "/addQuestion")
+	public @ResponseBody void addQuestion(@RequestBody QuestionForm questionForm){
+		Item item = this.itemService.findById(questionForm.getItemid());
+		String select = questionForm.getSelect();
+		
+		Comment comment = new Comment();
+		comment.setItem(item);
+		comment.setText(select);
+		
+		this.commentRepository.save(comment);
+	
+	}
 	
 	//返回用户的足迹footstepList
 	@RequestMapping(value = "/getFootstepItem/{username}")
