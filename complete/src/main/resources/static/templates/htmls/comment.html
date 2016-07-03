@@ -188,10 +188,9 @@ $("#QuestionSubmit").click(function(){
 				var JSEND={};
 				var JSEND2={};
 				JSEND["itemid"]=nowItem;
-				JSEND2["itemid"]=nowItem;
-				var select_Q=$("#QuestionTrue").val();
+				var select_Q=$("#QuestionTrue").is(':checked');
 				console.log(select_Q);
-				if (select_Q=="option1"){
+				if (select_Q){
 					JSEND["select"]="该景点分类是否正确 is 是!";
 				}else{
 				JSEND["select"]="该景点分类是否正确 is 否!";
